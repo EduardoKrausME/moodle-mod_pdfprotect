@@ -15,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * phpcs:moodle.Files.MoodleInternal.MoodleInternalGlobalState
- *
  * Restore Class file.
  *
  * @package   mod_pdfprotect
@@ -24,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// phpcs:moodle.Files.MoodleInternal.MoodleInternalGlobalState
 require_once("{$CFG->dirroot}/mod/pdfprotect/backup/moodle2/restore_pdfprotect_stepslib.php");
 
 /**
