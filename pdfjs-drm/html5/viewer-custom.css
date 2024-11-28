@@ -1,0 +1,40 @@
+#viewThumbnail,
+#viewOutline,
+#viewAttachments,
+#secondaryPresentationMode,
+#secondaryOpenFile,
+#secondaryPrint,
+#secondaryDownload,
+#secondaryViewBookmark,
+#pageRotateCw,
+#pageRotateCcw,
+#toggleHandTool,
+#div-nada {
+  display: none !important;
+}
+
+#toolbarViewerRight {
+  display: none !important;
+}
+
+#viewerContainer {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: hand;
+}
+
+@media print {
+  * {
+    display: none !important;
+  }
+  body {
+    display: none !important;
+  }
+  #viewerContainer {
+    display: none !important;
+  }
+}
+
+/*# sourceMappingURL=viewer-custom.css.map */

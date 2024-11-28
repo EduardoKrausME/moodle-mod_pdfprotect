@@ -1,0 +1,15 @@
+{
+  "showPreviousViewOnLoad": true,
+  "defaultZoomValue": "page-width",
+  "sidebarViewOnLoad": 0,
+  "enableHandToolOnLoad": true,
+  "enableWebGL": false,
+  "pdfBugEnabled": false,
+  "disableRange": false,
+  "disableStream": false,
+  "disableAutoFetch": false,
+  "disableFontFace": false,
+  "disableTextLayer": true,
+  "useOnlyCssZoom": false,
+  "externalLinkTarget": 2
+}

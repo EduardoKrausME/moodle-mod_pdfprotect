@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>pdfjs-drm</location>
+        <name>pdfjs</name>
+        <version>2.8.335-legacy</version>
+        <license>Apache License</license>
+    </library>
+</libraries>
