@@ -56,5 +56,6 @@ $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 
 echo $OUTPUT->render_from_template('mod_pdfprotect/view_page', ['id' => $id]);
+$PAGE->requires->js_call_amd("mod_pdfprotect/view_page", "init", []);
 
 echo $OUTPUT->footer();

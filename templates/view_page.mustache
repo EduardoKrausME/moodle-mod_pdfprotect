@@ -28,16 +28,4 @@
         allow=":encrypted-media; :picture-in-picture"
         frameborder="0" allowfullscreen
         style="width:100%;height: calc(100vw * 1.4);"
-        src="{{config.wwwroot}}/mod/pdfprotect/drm/html5/viewer.php?id={{id}}"></iframe>
-
-{{#js}}
-    require(["jquery"], function($) {
-        $(window).resize(frame_resize);
-        frame_resize();
-        function frame_resize() {
-            $("#pdfprotect-iframe").height(
-                $(window).height() - 100;
-            )
-        }
-    });
-{{/js}}
+        src="{{config.wwwroot}}/mod/pdfprotect/pdfjs-drm/html5/viewer.php?id={{id}}"></iframe>
