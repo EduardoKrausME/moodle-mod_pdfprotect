@@ -24,20 +24,19 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-
-$string['contentheader'] = 'Conteúdo';
-$string['dnduploadpdfprotect'] = 'Criar novo PDF Protect';
-$string['filenotfound'] = 'Arquivo não localizado!';
+$string['contentheader'] = 'Content';
+$string['dnduploadpdfprotect'] = 'Create new PDF Protect';
+$string['filenotfound'] = 'File not found!';
 $string['modulename'] = 'PDF Protect';
-$string['modulename_help'] = 'O módulo de PDF Protect fornece um sistema altamente seguro contra download de PDF no Moodle';
+$string['modulename_help'] = 'The PDF Protect module provides a highly secure system against PDF downloads in Moodle';
 $string['modulenameplural'] = 'PDF Protects';
-$string['pdfprotect:addinstance'] = '';
-$string['pdfprotect:view'] = '';
-$string['pluginadministration'] = 'Administração do PDF Protect';
+$string['pdfprotect:addinstance'] = "";
+$string['pdfprotect:view'] = "";
+$string['pluginadministration'] = 'PDF Protect Administration';
 $string['pluginname'] = 'PDF Protect';
 $string['privacy:metadata'] = 'The PDF Protect plugin does not store any personal data.';
-$string['resource:addinstance'] = 'Adicionar novo recurso';
-$string['resource:exportresource'] = 'Exportar PDF Protect';
-$string['resource:view'] = 'Ver PDF Protect';
+$string['resource:addinstance'] = 'Add new resource';
+$string['resource:exportresource'] = 'Export PDF Protect';
+$string['resource:view'] = 'View PDF Protect';
 $string['resourcedetails_sizetype'] = '{$a->size} {$a->type}';
-$string['selectmainfile'] = 'Por favor, selecione o arquivo principal, clicando no ícone ao lado do nome do arquivo.';
+$string['selectmainfile'] = 'Please select the main file by clicking the icon next to the file name.';
