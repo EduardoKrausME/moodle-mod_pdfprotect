@@ -4,8 +4,7 @@
  * pdfprotect module version information
  *
  * @package    mod_pdfprotect
- * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2021 Eduardo Kraus {@link http://eduardokraus.com}
  */
 
 header('Access-Control-Allow-Origin: *');
