@@ -41,7 +41,7 @@ class backup_pdfprotect_activity_task extends backup_activity_task {
      * Defines a backup step to store the instance data in the pdfprotect.xml file
      */
     protected function define_my_steps() {
-        $this->add_step(new backup_pdfprotect_activity_structure_step('pdfprotect_structure', 'pdfprotect.xml'));
+        $this->add_step(new backup_pdfprotect_activity_structure_step("pdfprotect_structure", "pdfprotect.xml"));
     }
 
     /**
@@ -58,13 +58,13 @@ class backup_pdfprotect_activity_task extends backup_activity_task {
 
         // Link to the list of pdfprotects.
         $search = "/({$base}\/mod\/pdfprotect\/index.php\?id\=)([0-9]+)/";
-        $content = preg_replace($search, '$@PDFPROTECTINDEX*$2@$', $content);
+        $content = preg_replace($search, "$@PDFPROTECTINDEX*$2@$", $content);
 
         // Link to pdfprotect view by moduleid.
         $search = "/({$base}\/mod\/pdfprotect\/view.php\?id\=)([0-9]+)/";
         // Link to pdfprotect view by recordid.
 
-        $content = preg_replace($search, '$@PDFPROTECTVIEWBYID*$2@$', $content);
+        $content = preg_replace($search, "$@PDFPROTECTVIEWBYID*$2@$", $content);
         return $content;
     }
 }

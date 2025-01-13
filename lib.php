@@ -51,9 +51,8 @@ function pdfprotect_supports($feature) {
             return true;
         case FEATURE_SHOW_DESCRIPTION:
             return true;
-        case 'mod_purpose':
-            return 'content';
-
+        case "mod_purpose":
+            return "content";
         default:
             return null;
     }
@@ -65,7 +64,7 @@ function pdfprotect_supports($feature) {
  * @return array
  */
 function pdfprotect_get_extra_capabilities() {
-    return ['moodle/site:accessallgroups'];
+    return ["moodle/site:accessallgroups"];
 }
 
 /**
@@ -90,7 +89,7 @@ function pdfprotect_reset_userdata($data) {
  * @return array
  */
 function pdfprotect_get_view_actions() {
-    return ['view', 'view all'];
+    return ["view", "view all"];
 }
 
 /**
@@ -104,7 +103,7 @@ function pdfprotect_get_view_actions() {
  * @return array
  */
 function pdfprotect_get_post_actions() {
-    return ['update', 'add'];
+    return ["update", "add"];
 }
 
 /**
@@ -115,6 +114,7 @@ function pdfprotect_get_post_actions() {
  *
  * @return int new pdfprotect instance id
  * @throws dml_exception
+ * @throws coding_exception
  */
 function pdfprotect_add_instance($data, $mform) {
     global $CFG, $DB;
@@ -122,10 +122,10 @@ function pdfprotect_add_instance($data, $mform) {
     $cmid = $data->coursemodule;
     $data->timemodified = time();
 
-    $data->id = $DB->insert_record('pdfprotect', $data);
+    $data->id = $DB->insert_record("pdfprotect", $data);
 
     // We need to use context now, so we need to make sure all needed info is already in db.
-    $DB->set_field('course_modules', 'instance', $data->id, ['id' => $cmid]);
+    $DB->set_field("course_modules", "instance", $data->id, ["id" => $cmid]);
     pdfprotect_set_mainfile($data);
 
     return $data->id;
@@ -139,14 +139,15 @@ function pdfprotect_add_instance($data, $mform) {
  *
  * @return bool true
  * @throws dml_exception
+ * @throws coding_exception
  */
 function pdfprotect_update_instance($data, $mform) {
-    global $CFG, $DB;
+    global $DB;
     $data->timemodified = time();
     $data->id = $data->instance;
     $data->revision++;
 
-    $DB->update_record('pdfprotect', $data);
+    $DB->update_record("pdfprotect", $data);
     pdfprotect_set_mainfile($data);
 
     return true;
@@ -158,15 +159,16 @@ function pdfprotect_update_instance($data, $mform) {
  * @param int $id
  *
  * @return bool true
+ * @throws dml_exception
  */
 function pdfprotect_delete_instance($id) {
     global $DB;
 
-    if (!$pdfprotect = $DB->get_record('pdfprotect', ['id' => $id])) {
+    if (!$pdfprotect = $DB->get_record("pdfprotect", ["id" => $id])) {
         return false;
     }
 
-    $DB->delete_records('pdfprotect', ['id' => $pdfprotect->id]);
+    $DB->delete_records("pdfprotect", ["id" => $pdfprotect->id]);
 
     return true;
 }
@@ -181,7 +183,6 @@ function pdfprotect_delete_instance($id) {
  * @param stdClass $coursemodule
  *
  * @return cached_cm_info info
- * @throws coding_exception
  * @throws dml_exception
  */
 function pdfprotect_get_coursemodule_info($coursemodule) {
@@ -191,18 +192,16 @@ function pdfprotect_get_coursemodule_info($coursemodule) {
     require_once("{$CFG->dirroot}/mod/pdfprotect/locallib.php");
     require_once("{$CFG->libdir}/completionlib.php");
 
-    $context = context_module::instance($coursemodule->id);
-
-    if (!$pdfprotect = $DB->get_record('pdfprotect',
-        ['id' => $coursemodule->instance],
-        'id, name, display, revision, intro, introformat')) {
+    if (!$pdfprotect = $DB->get_record("pdfprotect",
+        ["id" => $coursemodule->instance],
+        "id, name, display, revision, intro, introformat")) {
         return null;
     }
 
     $info = new cached_cm_info();
     $info->name = $pdfprotect->name;
     if ($coursemodule->showdescription) {
-        $info->content = format_module_intro('pdfprotect', $pdfprotect, $coursemodule->id, false);
+        $info->content = format_module_intro("pdfprotect", $pdfprotect, $coursemodule->id, false);
     }
 
     $info->completionpassgrade = false;
@@ -227,7 +226,7 @@ function pdfprotect_get_coursemodule_info($coursemodule) {
  */
 function pdfprotect_get_file_areas($course, $cm, $context) {
     $areas = [];
-    $areas['content'] = get_string('pdfprotectcontent', 'pdfprotect');
+    $areas["content"] = get_string("pdfprotectcontent", "pdfprotect");
 
     return $areas;
 }
@@ -254,21 +253,21 @@ function pdfprotect_get_file_areas($course, $cm, $context) {
 function pdfprotect_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
     global $CFG;
 
-    if (!has_capability('moodle/course:managefiles', $context)) {
+    if (!has_capability("moodle/course:managefiles", $context)) {
         // Students can not peak here!
         return null;
     }
 
     $fs = get_file_storage();
 
-    if ($filearea === 'content') {
-        $filepath = is_null($filepath) ? '/' : $filepath;
-        $filename = is_null($filename) ? '.' : $filename;
+    if ($filearea === "content") {
+        $filepath = is_null($filepath) ? "/" : $filepath;
+        $filename = is_null($filename) ? "." : $filename;
 
         $urlbase = "{$CFG->wwwroot}/pluginfile.php";
-        if (!$storedfile = $fs->get_file($context->id, 'mod_pdfprotect', 'content', 0, $filepath, $filename)) {
-            if ($filepath === '/' && $filename === '.') {
-                $storedfile = new virtual_root_file($context->id, 'mod_pdfprotect', 'content', 0);
+        if (!$storedfile = $fs->get_file($context->id, "mod_pdfprotect", "content", 0, $filepath, $filename)) {
+            if ($filepath === "/" && $filename === ".") {
+                $storedfile = new virtual_root_file($context->id, "mod_pdfprotect", "content", 0);
             } else {
                 // Not found.
                 return null;
@@ -307,37 +306,37 @@ function pdfprotect_pluginfile($course, $cm, $context, $filearea, $args, $forced
     global $DB;
 
     require_course_login($course, true, $cm);
-    if (!has_capability('mod/pdfprotect:view', $context)) {
+    if (!has_capability("mod/pdfprotect:view", $context)) {
         return false;
     }
 
-    if ($filearea !== 'content') {
+    if ($filearea !== "content") {
         // Intro is handled automatically in pluginfile.php.
         return false;
     }
 
-    if (optional_param('sfgsdjfgkhjdsfhkjsdkfhgjsdfgkj', 0, PARAM_INT)) {
+    if (optional_param("sfgsdjfgkhjdsfhkjsdkfhgjsdfgkj", 0, PARAM_INT)) {
         array_shift($args);
 
         $fs = get_file_storage();
-        $relativepath = urldecode(implode('/', $args));
-        $fullpath = rtrim("/{$context->id}/mod_pdfprotect/{$filearea}/0/{$relativepath}", '/');
+        $relativepath = urldecode(implode("/", $args));
+        $fullpath = rtrim("/{$context->id}/mod_pdfprotect/{$filearea}/0/{$relativepath}", "/");
         $file = $fs->get_file_by_hash(sha1($fullpath));
 
         send_stored_file($file, null, null, $forcedownload, $options);
         die();
     }
-    if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-        die("acesso negado!");
+    if ($_SERVER["REQUEST_METHOD"] != "POST") {
+        die("die!");
     }
 
     // Ignore revision - designed to prevent caching problems only.
     array_shift($args);
 
     $fs = get_file_storage();
-    $relativepath = implode('/', $args);
-    $fullpath = rtrim("/{$context->id}/mod_pdfprotect/{$filearea}/0/{$relativepath}", '/');
-    $fullpath = str_replace('.drm', '.pdf', $fullpath);
+    $relativepath = implode("/", $args);
+    $fullpath = rtrim("/{$context->id}/mod_pdfprotect/{$filearea}/0/{$relativepath}", "/");
+    $fullpath = str_replace(".drm", ".pdf", $fullpath);
 
     $file = $fs->get_file_by_hash(sha1($fullpath));
 
@@ -350,20 +349,20 @@ function pdfprotect_pluginfile($course, $cm, $context, $filearea, $args, $forced
              WHERE f.id = ?";
     $filerecord = $DB->get_record_sql($sql, [$file->get_id()]);
 
-    $filerecord->filename = str_replace('.pdf', '.drm', $filerecord->filename);
-    $filerecord->source = str_replace('.pdf', '.drm', $filerecord->source);
-    $filerecord->mimetype = 'application/drm';
+    $filerecord->filename = str_replace(".pdf", ".drm", $filerecord->filename);
+    $filerecord->source = str_replace(".pdf", ".drm", $filerecord->source);
+    $filerecord->mimetype = "application/drm";
 
     $file = $fs->get_file_instance($filerecord);
 
     \core\session\manager::write_close();
 
     header('Content-Disposition: attachment; filename="' . $options['filename'] . '"');
-    header('Cache-Control:private max-age=1, no-transform');
-    header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 1) . ' GMT');
-    header('Pragma: ');
+    header("Cache-Control:private max-age=1, no-transform");
+    header("Expires: " . gmdate("D, d M Y H:i:s", time() + 1) . " GMT");
+    header("Pragma: ");
 
-    if (empty($options['dontdie'])) {
+    if (empty($options["dontdie"])) {
         $dontdie = false;
     } else {
         $dontdie = true;
@@ -390,36 +389,36 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
     $l1 = $contenthash[0] . $contenthash[1];
     $l2 = $contenthash[2] . $contenthash[3];
     $ff = "{$CFG->dataroot}/filedir/{$l1}/{$l2}/{$contenthash}";
-    $ffdrm = "{$CFG->dataroot}/filedir/{$l1}/{$l2}/{$contenthash}" . '_drm';
+    $ffdrm = "{$CFG->dataroot}/filedir/{$l1}/{$l2}/{$contenthash}_drm";
 
     if (!file_exists($ffdrm)) {
         copy($ff, $ffdrm);
-        $fp = fopen($ffdrm, 'r+');
-        fwrite($fp, '%DRM');
+        $fp = fopen($ffdrm, "r+");
+        fwrite($fp, "%DRM");
         fclose($fp);
     }
 
-    $handle = fopen($ffdrm, 'r');
+    $handle = fopen($ffdrm, "r");
 
-    header('Content-Type: ' . $mimetype);
-    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $file->get_timemodified()) . ' GMT');
+    header("Content-Type: {$mimetype}");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s", $file->get_timemodified()) . " GMT");
 
     if ($accelerate && empty($CFG->disablebyteserving)) {
-        header('Accept-Ranges: bytes');
+        header("Accept-Ranges: bytes");
 
-        if (!empty($_SERVER['HTTP_RANGE']) && strpos($_SERVER['HTTP_RANGE'], 'bytes=') !== false) {
-            $test = preg_match_all('/(\d*)-(\d*)/', $_SERVER['HTTP_RANGE'], $ranges, PREG_SET_ORDER);
+        if (!empty($_SERVER["HTTP_RANGE"]) && strpos($_SERVER["HTTP_RANGE"], "bytes=") !== false) {
+            $test = preg_match_all('/(\d*)-(\d*)/', $_SERVER["HTTP_RANGE"], $ranges, PREG_SET_ORDER);
             if ($test) {
                 foreach ($ranges as $key => $value) {
-                    if ($ranges[$key][1] == '') {
+                    if ($ranges[$key][1] == "") {
                         // Suffix case.
                         $ranges[$key][1] = $file->get_filesize() - $ranges[$key][2];
                         $ranges[$key][2] = $file->get_filesize() - 1;
-                    } else if ($ranges[$key][2] == '' || $ranges[$key][2] > $file->get_filesize() - 1) {
+                    } else if ($ranges[$key][2] == "" || $ranges[$key][2] > $file->get_filesize() - 1) {
                         // Fix range length.
                         $ranges[$key][2] = $file->get_filesize() - 1;
                     }
-                    if ($ranges[$key][2] != '' && $ranges[$key][2] < $ranges[$key][1]) {
+                    if ($ranges[$key][2] != "" && $ranges[$key][2] < $ranges[$key][1]) {
                         // Invalid byte-range ==> ignore header.
                         $ranges = false;
                         break;
@@ -438,10 +437,10 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
         }
     } else {
         // Do not byteserve.
-        header('Accept-Ranges: none');
+        header("Accept-Ranges: none");
     }
 
-    header('Content-Length: ' . $file->get_filesize());
+    header("Content-Length: {$file->get_filesize()}");
 
     if ($file->get_filesize() > 10000000) {
         // For large files try to flush and close all buffers to conserve memory.
@@ -463,7 +462,6 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
         echo $buffer;
         $left -= $size;
     }
-
 }
 
 /**
@@ -477,7 +475,7 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
  * @throws coding_exception
  */
 function pdfprotect_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    $modulepagetype = ['mod-pdfprotect-*' => get_string('page-mod-pdfprotect-x', 'pdfprotect')];
+    $modulepagetype = ["mod-pdfprotect-*" => get_string("page-mod-pdfprotect-x", "pdfprotect")];
 
     return $modulepagetype;
 }
@@ -497,10 +495,10 @@ function pdfprotect_export_contents($cm, $baseurl) {
 
     $contents = [];
     $context = context_module::instance($cm->id);
-    $pdfprotect = $DB->get_record('pdfprotect', ['id' => $cm->instance], '*', MUST_EXIST);
+    $pdfprotect = $DB->get_record("pdfprotect", ["id" => $cm->instance], "*", MUST_EXIST);
 
     $fs = get_file_storage();
-    $files = $fs->get_area_files($context->id, 'mod_pdfprotect', 'content', 0, 'sortorder DESC, id ASC', false);
+    $files = $fs->get_area_files($context->id, "mod_pdfprotect", "content", 0, "sortorder DESC, id ASC", false);
 
     foreach ($files as $fileinfo) {
 
@@ -508,22 +506,22 @@ function pdfprotect_export_contents($cm, $baseurl) {
         $fileurl = "{$CFG->wwwroot}/{$baseurl}/{$context->id}/mod_pdfprotect/content/" .
             "{$pdfprotect->revision}{$fileinfo->get_filepath()}{$filename}";
         $file = [
-            'type' => 'file',
-            'filename' => $fileinfo->get_filename(),
-            'filepath' => $fileinfo->get_filepath(),
-            'filesize' => $fileinfo->get_filesize(),
-            'fileurl' => $fileurl,
-            'timecreated' => $fileinfo->get_timecreated(),
-            'timemodified' => $fileinfo->get_timemodified(),
-            'sortorder' => $fileinfo->get_sortorder(),
-            'userid' => $fileinfo->get_userid(),
-            'author' => $fileinfo->get_author(),
-            'license' => $fileinfo->get_license(),
+            "type" => "file",
+            "filename" => $fileinfo->get_filename(),
+            "filepath" => $fileinfo->get_filepath(),
+            "filesize" => $fileinfo->get_filesize(),
+            "fileurl" => $fileurl,
+            "timecreated" => $fileinfo->get_timecreated(),
+            "timemodified" => $fileinfo->get_timemodified(),
+            "sortorder" => $fileinfo->get_sortorder(),
+            "userid" => $fileinfo->get_userid(),
+            "author" => $fileinfo->get_author(),
+            "license" => $fileinfo->get_license(),
         ];
         $contents[] = $file;
-
-        return $contents;
     }
+
+    return $contents;
 }
 
 /**
@@ -540,14 +538,14 @@ function pdfprotect_export_contents($cm, $baseurl) {
 function pdfprotect_view($pdfprotect, $course, $cm, $context) {
     // Trigger course_module_viewed event.
     $params = [
-        'context' => $context,
-        'objectid' => $pdfprotect->id,
+        "context" => $context,
+        "objectid" => $pdfprotect->id,
     ];
 
     $event = \mod_pdfprotect\event\course_module_viewed::create($params);
-    $event->add_record_snapshot('course_modules', $cm);
-    $event->add_record_snapshot('course', $course);
-    $event->add_record_snapshot('pdfprotect', $pdfprotect);
+    $event->add_record_snapshot("course_modules", $cm);
+    $event->add_record_snapshot("course", $course);
+    $event->add_record_snapshot("pdfprotect", $pdfprotect);
     $event->trigger();
 
     // Completion.
@@ -559,13 +557,14 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
  * Register the ability to handle drag and drop file uploads
  *
  * @return array containing details of the files / types the mod can handle
+ * @throws coding_exception
  */
 function pdfprotect_dndupload_register() {
-    return ['files' =>
+    return ["files" =>
         [
             [
-                'extension' => 'pdf',
-                'message' => get_string('dnduploadpdfprotect', 'mod_pdfprotect'),
+                "extension" => "pdf",
+                "message" => get_string("dnduploadpdfprotect", "mod_pdfprotect"),
             ],
         ],
     ];
@@ -577,12 +576,14 @@ function pdfprotect_dndupload_register() {
  * @param object $uploadinfo details of the file / content that has been uploaded
  *
  * @return int instance id of the newly created mod
+ * @throws coding_exception
+ * @throws dml_exception
  */
 function pdfprotect_dndupload_handle($uploadinfo) {
     $data = new stdClass();
     $data->course = $uploadinfo->course->id;
     $data->name = $uploadinfo->displayname;
-    $data->intro = '';
+    $data->intro = "";
     $data->introformat = FORMAT_HTML;
     $data->coursemodule = $uploadinfo->coursemodule;
     $data->files = $uploadinfo->draftitemid;

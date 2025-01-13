@@ -39,9 +39,9 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * @return void
      */
     protected function init() {
-        $this->data['objecttable'] = 'pdfprotect';
-        $this->data['crud'] = 'r';
-        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
+        $this->data["objecttable"] = "pdfprotect";
+        $this->data["crud"] = "r";
+        $this->data["edulevel"] = self::LEVEL_PARTICIPATING;
     }
 
     /**
@@ -50,6 +50,6 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * @return array|string
      */
     public static function get_objectid_mapping() {
-        return [ 'db' => 'pdfprotect', 'restore' => 'pdfprotect' ];
+        return [ "db" => "pdfprotect", "restore" => "pdfprotect" ];
     }
 }

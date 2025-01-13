@@ -33,16 +33,18 @@ require_once("{$CFG->dirroot}/mod/pdfprotect/lib.php");
  * @param object $pdfprotect
  * @param object $cm
  * @param object $course
+ *
  * @return void
+ * @throws coding_exception
  */
 function pdfprotect_print_header($pdfprotect, $cm, $course, $embed = false) {
     global $PAGE, $OUTPUT;
 
-    $PAGE->set_title($course->shortname . ': ' . $pdfprotect->name);
+    $PAGE->set_title("{$course->shortname}: {$pdfprotect->name}");
     $PAGE->set_heading($course->fullname);
     $PAGE->set_activity_record($pdfprotect);
     if ($embed) {
-        $PAGE->set_pagelayout('embedded');
+        $PAGE->set_pagelayout("embedded");
     }
     echo $OUTPUT->header();
 }
@@ -54,6 +56,7 @@ function pdfprotect_print_header($pdfprotect, $cm, $course, $embed = false) {
  * @param object $cm
  * @param object $course
  * @param bool $notused This variable is no longer used
+ *
  * @return void
  */
 function pdfprotect_print_heading($pdfprotect, $cm, $course, $notused = false) {
@@ -68,6 +71,7 @@ function pdfprotect_print_heading($pdfprotect, $cm, $course, $notused = false) {
  * @param object $cm
  * @param object $course
  * @param bool $ignoresettings print even if not specified in modedit
+ *
  * @return void
  */
 function pdfprotect_print_intro($pdfprotect, $cm, $course, $ignoresettings = false) {
@@ -76,9 +80,9 @@ function pdfprotect_print_intro($pdfprotect, $cm, $course, $ignoresettings = fal
     if ($ignoresettings) {
         $gotintro = trim(strip_tags($pdfprotect->intro));
         if ($gotintro) {
-            echo $OUTPUT->box_start('mod_introbox', 'pdfprotectintro');
+            echo $OUTPUT->box_start("mod_introbox", "pdfprotectintro");
             if ($gotintro) {
-                echo format_module_intro('pdfprotect', $pdfprotect, $cm->id);
+                echo format_module_intro("pdfprotect", $pdfprotect, $cm->id);
             }
             echo $OUTPUT->box_end();
         }
@@ -91,7 +95,9 @@ function pdfprotect_print_intro($pdfprotect, $cm, $course, $ignoresettings = fal
  * @param object $pdfprotect
  * @param object $cm
  * @param object $course
+ *
  * @return void, does not return
+ * @throws coding_exception
  */
 function pdfprotect_print_filenotfound($pdfprotect, $cm, $course) {
     global $OUTPUT;
@@ -99,7 +105,7 @@ function pdfprotect_print_filenotfound($pdfprotect, $cm, $course) {
     pdfprotect_print_header($pdfprotect, $cm, $course, true);
     pdfprotect_print_heading($pdfprotect, $cm, $course);
     pdfprotect_print_intro($pdfprotect, $cm, $course);
-    echo $OUTPUT->notification(get_string('filenotfound', 'pdfprotect'));
+    echo $OUTPUT->notification(get_string("filenotfound", "pdfprotect"));
     echo $OUTPUT->footer();
     die;
 }
@@ -114,7 +120,7 @@ class pdfprotect_content_file_info extends file_info_stored {
      * @return file_info|null
      */
     public function get_parent() {
-        if ($this->lf->get_filepath() === '/' && $this->lf->get_filename() === '.') {
+        if ($this->lf->get_filepath() === "/" && $this->lf->get_filename() === ".") {
             return $this->browser->get_file_info($this->context);
         }
 
@@ -127,7 +133,7 @@ class pdfprotect_content_file_info extends file_info_stored {
      * @return string
      */
     public function get_visible_name() {
-        if ($this->lf->get_filepath() === '/' && $this->lf->get_filename() === '.') {
+        if ($this->lf->get_filepath() === "/" && $this->lf->get_filename() === ".") {
             return $this->topvisiblename;
         }
 
@@ -139,6 +145,8 @@ class pdfprotect_content_file_info extends file_info_stored {
  * Function pdfprotect_set_mainfile
  *
  * @param $data
+ *
+ * @throws coding_exception
  */
 function pdfprotect_set_mainfile($data) {
     $fs = get_file_storage();
@@ -147,12 +155,12 @@ function pdfprotect_set_mainfile($data) {
 
     $context = context_module::instance($cmid);
     if ($draftitemid) {
-        file_save_draft_area_files($draftitemid, $context->id, 'mod_pdfprotect', 'content', 0, [ 'subdirs' => true ]);
+        file_save_draft_area_files($draftitemid, $context->id, "mod_pdfprotect", "content", 0, ["subdirs" => true]);
     }
-    $files = $fs->get_area_files($context->id, 'mod_pdfprotect', 'content', 0, 'sortorder', false);
+    $files = $fs->get_area_files($context->id, "mod_pdfprotect", "content", 0, "sortorder", false);
     if (count($files) == 1) {
         // Only one file attached, set it as main file automatically.
         $file = reset($files);
-        file_set_sortorder($context->id, 'mod_pdfprotect', 'content', 0, $file->get_filepath(), $file->get_filename(), 1);
+        file_set_sortorder($context->id, "mod_pdfprotect", "content", 0, $file->get_filepath(), $file->get_filename(), 1);
     }
 }

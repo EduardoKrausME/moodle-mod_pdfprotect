@@ -66,8 +66,8 @@ class restore_pdfprotect_activity_task extends restore_activity_task {
     public static function define_decode_rules() {
         $rules = [];
 
-        $rules[] = new restore_decode_rule("PDFPROTECTVIEWBYID", '/mod/pdfprotect/view.php?id=$1', "course_module");
-        $rules[] = new restore_decode_rule('PDFPROTECTINDEX', '/mod/pdfprotect/index.php?id=$1', 'course');
+        $rules[] = new restore_decode_rule("PDFPROTECTVIEWBYID", "/mod/pdfprotect/view.php?id=$1", "course_module");
+        $rules[] = new restore_decode_rule("PDFPROTECTINDEX", "/mod/pdfprotect/index.php?id=$1", "course");
 
         return $rules;
 
@@ -82,9 +82,9 @@ class restore_pdfprotect_activity_task extends restore_activity_task {
     public static function define_restore_log_rules() {
         $rules = [];
 
-        $rules[] = new restore_log_rule('pdfprotect', 'add', 'view.php?id={course_module}', '{pdfprotect}');
-        $rules[] = new restore_log_rule('pdfprotect', 'update', 'view.php?id={course_module}', '{pdfprotect}');
-        $rules[] = new restore_log_rule('pdfprotect', 'view', 'view.php?id={course_module}', '{pdfprotect}');
+        $rules[] = new restore_log_rule("pdfprotect", "add", "view.php?id={course_module}", "{pdfprotect}");
+        $rules[] = new restore_log_rule("pdfprotect", "update", "view.php?id={course_module}", "{pdfprotect}");
+        $rules[] = new restore_log_rule("pdfprotect", "view", "view.php?id={course_module}", "{pdfprotect}");
 
         return $rules;
     }
@@ -102,7 +102,7 @@ class restore_pdfprotect_activity_task extends restore_activity_task {
     public static function define_restore_log_rules_for_course() {
         $rules = [];
 
-        $rules[] = new restore_log_rule('pdfprotect', 'view all', 'index.php?id={course}', null);
+        $rules[] = new restore_log_rule("pdfprotect", "view all", "index.php?id={course}", null);
 
         return $rules;
     }

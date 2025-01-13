@@ -34,15 +34,15 @@ class backup_pdfprotect_activity_structure_step extends backup_activity_structur
      */
     protected function define_structure() {
         // Define each element separated.
-        $pdfprotect = new backup_nested_element('pdfprotect', ['id'],
-            ['name', 'intro', 'introformat', 'display', 'revision', 'timemodified']);
+        $pdfprotect = new backup_nested_element("pdfprotect", ["id"],
+            ["name", "intro", "introformat", "display", "revision", "timemodified"]);
 
         // Define sources.
-        $pdfprotect->set_source_table('pdfprotect', ['id' => backup::VAR_ACTIVITYID]);
+        $pdfprotect->set_source_table("pdfprotect", ["id" => backup::VAR_ACTIVITYID]);
 
         // Define file annotations.
-        $pdfprotect->annotate_files('mod_pdfprotect', 'intro', null); // This file areas haven't itemid.
-        $pdfprotect->annotate_files('mod_pdfprotect', 'content', null); // This file areas haven't itemid.
+        $pdfprotect->annotate_files("mod_pdfprotect", "intro", null); // This file areas haven't itemid.
+        $pdfprotect->annotate_files("mod_pdfprotect", "content", null); // This file areas haven't itemid.
 
         // Return the root element (pdfprotect), wrapped into standard activity structure.
         return $this->prepare_activity_structure($pdfprotect);

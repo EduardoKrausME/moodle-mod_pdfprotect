@@ -42,21 +42,21 @@ class mobile {
         global $OUTPUT, $USER, $_COOKIE;
 
         $data = [
-            'cmid' => $args['cmid'],
-            'session' => optional_param('wstoken', '', PARAM_TEXT),
-            'user_id' => $USER->id,
+            "cmid" => $args["cmid"],
+            "session" => optional_param("wstoken", "", PARAM_TEXT),
+            "user_id" => $USER->id,
         ];
 
         return [
-            'templates' => [
+            "templates" => [
                 [
-                    'id' => 'main',
-                    'html' => $OUTPUT->render_from_template('mod_pdfprotect/mobile_view_page', $data),
+                    "id" => "main",
+                    "html" => $OUTPUT->render_from_template("mod_pdfprotect/mobile_view_page", $data),
                 ],
             ],
-            'javascript' => file_get_contents(__DIR__ . '/mobile.js'),
-            'otherdata' => '',
-            'files' => [],
+            "javascript" => file_get_contents(__DIR__ . "/mobile.js"),
+            "otherdata" => "",
+            "files" => [],
         ];
     }
 }

@@ -24,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot . '/course/moodleform_mod.php');
-require_once($CFG->dirroot . '/mod/pdfprotect/locallib.php');
-require_once($CFG->libdir . '/filelib.php');
+require_once("{$CFG->dirroot}/course/moodleform_mod.php");
+require_once("{$CFG->dirroot}/mod/pdfprotect/locallib.php");
+require_once("{$CFG->libdir}/filelib.php");
 
 /**
  * Class mod_pdfprotect_mod_form
@@ -39,36 +39,36 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
         global $CFG;
         $mform =& $this->_form;
 
-        $mform->addElement('header', 'general', get_string('general', 'form'));
-        $mform->addElement('text', 'name', get_string('name'), ['size' => '48']);
+        $mform->addElement("header", "general", get_string("general", "form"));
+        $mform->addElement("text", "name", get_string("name"), ["size" => "48"]);
         if (!empty($CFG->formatstringstriptags)) {
-            $mform->setType('name', PARAM_TEXT);
+            $mform->setType("name", PARAM_TEXT);
         } else {
-            $mform->setType('name', PARAM_CLEANHTML);
+            $mform->setType("name", PARAM_CLEANHTML);
         }
 
-        $mform->addRule('name', null, 'required', null, 'client');
-        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+        $mform->addRule("name", null, "required", null, "client");
+        $mform->addRule("name", get_string("maximumchars", "", 255), "maxlength", 255, "client");
         $this->standard_intro_elements();
 
-        $mform->addElement('header', 'contentsection', get_string('contentheader', 'pdfprotect'));
-        $mform->setExpanded('contentsection');
+        $mform->addElement("header", "contentsection", get_string("contentheader", "pdfprotect"));
+        $mform->setExpanded("contentsection");
 
         $filemanageroptions = [];
-        $filemanageroptions['accepted_types'] = '.pdf';
-        $filemanageroptions['maxbytes'] = 0;
-        $filemanageroptions['maxfiles'] = 1;
-        $filemanageroptions['mainfile'] = true;
+        $filemanageroptions["accepted_types"] = ".pdf";
+        $filemanageroptions["maxbytes"] = 0;
+        $filemanageroptions["maxfiles"] = 1;
+        $filemanageroptions["mainfile"] = true;
 
-        $mform->addElement('filemanager', 'files', get_string('selectfiles'), null, $filemanageroptions);
+        $mform->addElement("filemanager", "files", get_string("selectfiles"), null, $filemanageroptions);
 
         $this->standard_coursemodule_elements();
 
         $this->add_action_buttons();
 
-        $mform->addElement('hidden', 'revision');
-        $mform->setType('revision', PARAM_INT);
-        $mform->setDefault('revision', 1);
+        $mform->addElement("hidden", "revision");
+        $mform->setType("revision", PARAM_INT);
+        $mform->setDefault("revision", 1);
     }
 
     /**
@@ -78,9 +78,9 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
      */
     public function data_preprocessing(&$defaultvalues) {
         if ($this->current->instance) {
-            $draftitemid = file_get_submitted_draft_itemid('files');
-            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_pdfprotect', 'content', 0, ['subdirs' => true]);
-            $defaultvalues['files'] = $draftitemid;
+            $draftitemid = file_get_submitted_draft_itemid("files");
+            file_prepare_draft_area($draftitemid, $this->context->id, "mod_pdfprotect", "content", 0, ["subdirs" => true]);
+            $defaultvalues["files"] = $draftitemid;
         }
     }
 
@@ -103,6 +103,7 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
      * @param $files
      *
      * @return mixed
+     * @throws coding_exception
      */
     public function validation($data, $files) {
         global $USER;
@@ -111,8 +112,8 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
 
         $usercontext = context_user::instance($USER->id);
         $fs = get_file_storage();
-        if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $data['files'], 'sortorder, id', false)) {
-            $errors['files'] = get_string('required');
+        if (!$files = $fs->get_area_files($usercontext->id, "user", "draft", $data["files"], "sortorder, id", false)) {
+            $errors["files"] = get_string("required");
             return $errors;
         }
         if (count($files) == 1) {

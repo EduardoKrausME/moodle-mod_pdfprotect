@@ -26,13 +26,13 @@ defined('MOODLE_INTERNAL') || die;
 
 $addons = [
     "mod_pdfprotect" => [
-        'handlers' => [
-            'coursepdfprotect' => [
-                'delegate' => 'CoreCourseModuleDelegate',
-                'method' => 'mobile_course_view',
-                'displaydata' => [
-                    'icon' => "{$CFG->wwwroot }/mod/pdfprotect/pix/icon.png",
-                    'class' => "",
+        "handlers" => [
+            "coursepdfprotect" => [
+                "delegate" => "CoreCourseModuleDelegate",
+                "method" => "mobile_course_view",
+                "displaydata" => [
+                    "icon" => "{$CFG->wwwroot }/mod/pdfprotect/pix/icon.png",
+                    "class" => "",
                 ],
             ],
         ],

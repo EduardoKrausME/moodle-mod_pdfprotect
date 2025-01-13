@@ -34,7 +34,7 @@ class restore_pdfprotect_activity_structure_step extends restore_activity_struct
      */
     protected function define_structure() {
         $paths = [];
-        $paths[] = new restore_path_element('pdfprotect', '/activity/pdfprotect');
+        $paths[] = new restore_path_element("pdfprotect", "/activity/pdfprotect");
 
         // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
@@ -53,7 +53,7 @@ class restore_pdfprotect_activity_structure_step extends restore_activity_struct
         $data->timemodified = $this->apply_date_offset($data->timemodified);
 
         // Insert the pdfprotect record.
-        $newitemid = $DB->insert_record('pdfprotect', $data);
+        $newitemid = $DB->insert_record("pdfprotect", $data);
         // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
     }
@@ -64,7 +64,7 @@ class restore_pdfprotect_activity_structure_step extends restore_activity_struct
      */
     protected function after_execute() {
         // Add choice related files, no need to match by itemname (just internally handled context).
-        $this->add_related_files('mod_pdfprotect', 'intro', null);
-        $this->add_related_files('mod_pdfprotect', 'content', null);
+        $this->add_related_files("mod_pdfprotect", "intro", null);
+        $this->add_related_files("mod_pdfprotect", "content", null);
     }
 }
