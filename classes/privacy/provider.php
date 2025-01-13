@@ -18,24 +18,24 @@
  * Index file.
  *
  * @package   mod_pdfprotect
- * @copyright 2024 Eduardo kraus (http://eduardokraus.com)
+ * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Privacy Subsystem implementation for mod_resource.
+ * Privacy Subsystem implementation for mod_pdfprotect.
  *
- * @package    mod_resource
- * @copyright  2018 Zig Tan <zig@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_pdfprotect
+ * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_resource\privacy;
+namespace mod_pdfprotect\privacy;
 
 /**
  * Class provider
  *
- * @package mod_resource\privacy
+ * @package mod_pdfprotect\privacy
  */
 class provider implements \core_privacy\local\metadata\null_provider {
     /**

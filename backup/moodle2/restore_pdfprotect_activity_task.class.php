@@ -18,11 +18,12 @@
  * Restore Class file.
  *
  * @package   mod_pdfprotect
- * @copyright 2024 Eduardo kraus (http://eduardokraus.com)
+ * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// phpcs:moodle.Files.MoodleInternal.MoodleInternalGlobalState
+defined('MOODLE_INTERNAL') || die;
+
 require_once("{$CFG->dirroot}/mod/pdfprotect/backup/moodle2/restore_pdfprotect_stepslib.php");
 
 /**

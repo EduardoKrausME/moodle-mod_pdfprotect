@@ -18,7 +18,7 @@
  * The mod_pdfprotect course module instance list viewed.
  *
  * @package   mod_pdfprotect
- * @copyright 2024 Eduardo kraus (http://eduardokraus.com)
+ * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,8 +28,8 @@ namespace mod_pdfprotect\event;
  * The mod_pdfprotect instance list viewed event class.
  *
  * @package    mod_pdfprotect
- * @since      Moodle 2.7
- * @copyright  2021 Eduardo Kraus
+ * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
     // No need for any code here as everything is handled by the parent class.

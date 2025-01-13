@@ -18,7 +18,7 @@
  * Define all the backup steps that will be used by the backup_pdfprotect_activity_task
  *
  * @package   mod_pdfprotect
- * @copyright 2024 Eduardo kraus (http://eduardokraus.com)
+ * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
