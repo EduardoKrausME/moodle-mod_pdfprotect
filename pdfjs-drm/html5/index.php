@@ -72,6 +72,32 @@ $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, false);
 
 $fullurl = str_replace('.pdf', '.drm', $fullurl);
 
+
+$lang = $USER->lang;
+if (isset($_SESSION["SESSION"]->lang)) {
+    $lang = $_SESSION["SESSION"]->lang;
+}
+
+if (strpos($lang, "_")) {
+    list($firtlang, $lastlang) = explode("_", $lang);
+    $lastlang = strtoupper($lastlang);
+
+    $testlang = "{$firtlang}-{$lastlang}";
+    if (file_exists("{$CFG->dirroot}/mod/pdfprotect/pdfjs-drm/external/webL10n/locales/{$testlang}/viewer.properties")) {
+        $uselang = $testlang;
+    } else if (file_exists("{$CFG->dirroot}/mod/pdfprotect/pdfjs-drm/external/webL10n/locales/{$firtlang}/viewer.properties")) {
+        $uselang = $firtlang;
+    } else {
+        $uselang = "en";
+    }
+} else {
+    if (file_exists("{$CFG->dirroot}/mod/pdfprotect/pdfjs-drm/external/webL10n/locales/{$lang}/viewer.properties")) {
+        $uselang = $lang;
+    } else {
+        $uselang = "en";
+    }
+}
+
 ?>
 <!--
 PDF Protect by DRM
@@ -95,10 +121,15 @@ PDF Protect by DRM
     <script src="requirejs/require.min.js"></script>
     <script src="default_preferences.min.js"></script>
     <script src="viewer.min.js"></script>
-
+    <link rel="resource" type="application/l10n"
+          href="../external/webL10n/locales/<?php echo $uselang ?>/viewer.properties">
 </head>
 
 <body tabindex="1" class="loadingInProgress" oncontextmenu="return false">
+<script>
+    // Dynamically load language.
+    document.webL10n.setLanguage('<?php echo $uselang ?>');
+</script>
 <div id="outerContainer">
 
     <div id="sidebarContainer">
@@ -158,7 +189,8 @@ PDF Protect by DRM
                                 <span data-l10n-id="next_label">Próxima</span>
                             </button>
                         </div>
-                        <label id="pageNumberLabel" class="toolbarLabel" for="pageNumber" data-l10n-id="page_label">Pagina: </label>
+                        <label id="pageNumberLabel" class="toolbarLabel" for="pageNumber"
+                               data-l10n-id="document_properties_page_count">Número de páginas: </label>
 
                         <input type="number" id="pageNumber" class="toolbarField pageNumber" value="1" size="4" min="1"
                                tabindex="15">
