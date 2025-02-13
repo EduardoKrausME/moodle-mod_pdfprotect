@@ -26,10 +26,6 @@ Now, users will have access to the PDF directly in the browser, with no option t
 
 If you have suggestions or improvements for the plugin, feel free to create a *pull request* or open an *issue*.
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ## Contact
 
 Eduardo Kraus  
