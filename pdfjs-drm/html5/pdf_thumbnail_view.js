@@ -238,7 +238,7 @@
                 }
                 var id = this.renderingId;
                 var className = 'thumbnailImage';
-                var ariaLabel = mozL10n.get('thumb_page_canvas', {page : this.id},
+                var ariaLabel = mozL10n.get('thumb_page_title', {page : this.id},
                     'Thumbnail of Page {{page}}');
 
                 if (this.disableCanvasToImageConversion) {

@@ -143,7 +143,7 @@ PDF Protect by DRM
 
     <div id="mainContainer">
         <div class="findbar hidden doorHanger hiddenSmallView" id="findbar">
-            <label for="findInput" class="toolbarLabel" data-l10n-id="find_label">Buscar:</label>
+            <label for="findInput" class="toolbarLabel" data-l10n-id="findbar_label">Buscar:</label>
             <input id="findInput" class="toolbarField" tabindex="91">
 
             <div class="splitToolbarButton">
