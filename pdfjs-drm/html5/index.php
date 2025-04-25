@@ -123,6 +123,34 @@ PDF Protect by DRM
     <script src="viewer.min.js"></script>
     <link rel="resource" type="application/l10n"
           href="../external/webL10n/locales/<?php echo $uselang ?>/viewer.properties">
+    <style>
+        .toolbarButton.fullscreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toolbarButton.fullscreen::before {
+            content: "";
+            color: rgba(255, 255, 255, 0.8);
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-image: url('./images/fullscreen.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            position: relative;
+            top: -1px;
+            left: unset !important;
+            transform: unset;
+        }
+        
+        .fullscreen-active::before {
+            background-image: url('./images/fullscreen-exit.svg') !important;
+        }
+
+    </style>
 </head>
 
 <body tabindex="1" class="loadingInProgress" oncontextmenu="return false">
@@ -231,6 +259,10 @@ PDF Protect by DRM
                                  <option value="4" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 400 }'>400%</option>
                              </select>
                           </span>
+                            <button id="fullscreen" class="toolbarButton fullscreen" title="Tela cheia" tabindex="24"
+                                    data-l10n-id="fullscreen">
+                                <span data-l10n-id="fullscreen_label">Tela cheia</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -304,5 +336,66 @@ PDF Protect by DRM
 
 </div>
 <div id="printContainer"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var fullscreenButton = document.getElementById('fullscreen');
+        if (fullscreenButton) {
+            fullscreenButton.addEventListener('click', function() {
+                toggleFullScreen();
+            });
+        }
+        
+        function toggleFullScreen() {
+            var container = document.getElementById('outerContainer');
+            
+            if (!document.fullscreenElement &&    // alternative standard method
+                !document.mozFullScreenElement && 
+                !document.webkitFullscreenElement && 
+                !document.msFullscreenElement ) {  // current working methods
+                
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                } else if (container.mozRequestFullScreen) {
+                    container.mozRequestFullScreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+                
+                fullscreenButton.classList.add('fullscreen-active');
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                
+                fullscreenButton.classList.remove('fullscreen-active');
+            }
+        }
+        
+        // Listen for fullscreen change and update button icon
+        document.addEventListener('fullscreenchange', updateFullscreenButtonIcon);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenButtonIcon);
+        document.addEventListener('mozfullscreenchange', updateFullscreenButtonIcon);
+        document.addEventListener('MSFullscreenChange', updateFullscreenButtonIcon);
+        
+        function updateFullscreenButtonIcon() {
+            if (document.fullscreenElement || 
+                document.webkitFullscreenElement || 
+                document.mozFullScreenElement ||
+                document.msFullscreenElement) {
+                fullscreenButton.classList.add('fullscreen-active');
+            } else {
+                fullscreenButton.classList.remove('fullscreen-active');
+            }
+        }
+    });
+</script>
 </body>
 </html>
