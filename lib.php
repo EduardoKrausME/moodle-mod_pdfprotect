@@ -204,9 +204,11 @@ function pdfprotect_get_coursemodule_info($coursemodule) {
         $info->content = format_module_intro("pdfprotect", $pdfprotect, $coursemodule->id, false);
     }
 
-    $info->completionpassgrade = false;
-    $info->downloadcontent = false;
-    $info->lang = false;
+    $info->customdata = [
+        'completionpassgrade' => false,
+        'downloadcontent' => false,
+        'lang' => false,
+    ];
 
     return $info;
 }
