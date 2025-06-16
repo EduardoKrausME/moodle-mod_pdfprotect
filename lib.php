@@ -32,13 +32,11 @@
 function pdfprotect_supports($feature) {
     switch ($feature) {
         case FEATURE_MOD_ARCHETYPE:
-            return 1;
+            return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_GROUPS:
             return false;
         case FEATURE_GROUPINGS:
             return false;
-        case FEATURE_GROUPMEMBERSONLY:
-            return true;
         case FEATURE_MOD_INTRO:
             return true;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
@@ -51,8 +49,8 @@ function pdfprotect_supports($feature) {
             return true;
         case FEATURE_SHOW_DESCRIPTION:
             return true;
-        case "mod_purpose":
-            return "content";
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_CONTENT;
         default:
             return null;
     }
