@@ -160,10 +160,6 @@ function pdfprotect_update_instance($pdfprotect, $mform) {
 
     pdfprotect_set_mainfile($pdfprotect);
 
-    echo '<pre>';
-    print_r($_POST);
-    die;
-
     return true;
 }
 
@@ -192,7 +188,6 @@ function pdfprotect_delete_instance($id) {
     $context = context_module::instance($cm->id);
     $fs = get_file_storage();
     $fs->delete_area_files($context->id);
-
 
     $DB->delete_records("pdfprotect", ["id" => $pdfprotect->id]);
 
