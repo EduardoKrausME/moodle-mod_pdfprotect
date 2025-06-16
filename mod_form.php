@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once("{$CFG->dirroot}/course/moodleform_mod.php");
-require_once("{$CFG->dirroot}/mod/pdfprotect/locallib.php");
+require_once("{$CFG->dirroot}/mod/pdfprotect/lib.php");
 require_once("{$CFG->libdir}/filelib.php");
 
 /**

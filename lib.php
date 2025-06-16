@@ -22,6 +22,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\session\manager;
+use mod_pdfprotect\event\course_module_viewed;
+
+defined('MOODLE_INTERNAL') || die;
+
+require_once("{$CFG->libdir}/filelib.php");
+require_once("{$CFG->dirroot}/mod/pdfprotect/lib.php");
+
 /**
  * List of features supported in Pdfprotect module
  *
@@ -31,15 +39,15 @@
  */
 function pdfprotect_supports($feature) {
     switch ($feature) {
-        case FEATURE_MOD_ARCHETYPE:
-            return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_GROUPS:
-            return false;
+            return true;
         case FEATURE_GROUPINGS:
-            return false;
+            return true;
         case FEATURE_MOD_INTRO:
             return true;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:
             return true;
         case FEATURE_GRADE_HAS_GRADE:
             return false;
@@ -49,6 +57,10 @@ function pdfprotect_supports($feature) {
             return true;
         case FEATURE_SHOW_DESCRIPTION:
             return true;
+        case FEATURE_COMMENT:
+            return true;
+        case FEATURE_MOD_ARCHETYPE:
+            return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_MOD_PURPOSE:
             return MOD_PURPOSE_CONTENT;
         default:
@@ -107,46 +119,50 @@ function pdfprotect_get_post_actions() {
 /**
  * Add pdfprotect instance.
  *
- * @param stdClass $data
+ * @param stdClass $pdfprotect
  * @param stdClass $mform
  *
  * @return int new pdfprotect instance id
  * @throws dml_exception
  * @throws coding_exception
  */
-function pdfprotect_add_instance($data, $mform) {
-    global $CFG, $DB;
-    require_once("{$CFG->dirroot}/mod/pdfprotect/locallib.php");
-    $cmid = $data->coursemodule;
-    $data->timemodified = time();
+function pdfprotect_add_instance($pdfprotect, $mform = null) {
+    global $DB;
+    $cmid = $pdfprotect->coursemodule;
+    $pdfprotect->timemodified = time();
 
-    $data->id = $DB->insert_record("pdfprotect", $data);
+    $pdfprotect->id = $DB->insert_record("pdfprotect", $pdfprotect);
 
     // We need to use context now, so we need to make sure all needed info is already in db.
-    $DB->set_field("course_modules", "instance", $data->id, ["id" => $cmid]);
-    pdfprotect_set_mainfile($data);
+    $DB->set_field("course_modules", "instance", $pdfprotect->id, ["id" => $cmid]);
+    pdfprotect_set_mainfile($pdfprotect);
 
-    return $data->id;
+    return $pdfprotect->id;
 }
 
 /**
  * Update pdfprotect instance.
  *
- * @param stdClass $data
+ * @param stdClass $pdfprotect
  * @param stdClass $mform
  *
  * @return bool true
  * @throws dml_exception
  * @throws coding_exception
  */
-function pdfprotect_update_instance($data, $mform) {
+function pdfprotect_update_instance($pdfprotect, $mform) {
     global $DB;
-    $data->timemodified = time();
-    $data->id = $data->instance;
-    $data->revision++;
+    $pdfprotect->timemodified = time();
+    $pdfprotect->id = $pdfprotect->instance;
+    $pdfprotect->revision++;
 
-    $DB->update_record("pdfprotect", $data);
-    pdfprotect_set_mainfile($data);
+    $DB->update_record("pdfprotect", $pdfprotect);
+
+    pdfprotect_set_mainfile($pdfprotect);
+
+    echo '<pre>';
+    print_r($_POST);
+    die;
 
     return true;
 }
@@ -157,7 +173,8 @@ function pdfprotect_update_instance($data, $mform) {
  * @param int $id
  *
  * @return bool true
- * @throws dml_exception
+ *
+ * @throws Exception
  */
 function pdfprotect_delete_instance($id) {
     global $DB;
@@ -165,6 +182,17 @@ function pdfprotect_delete_instance($id) {
     if (!$pdfprotect = $DB->get_record("pdfprotect", ["id" => $id])) {
         return false;
     }
+
+    // Prepare file record object.
+    if (!$cm = get_coursemodule_from_instance('pdfprotect', $id)) {
+        return false;
+    }
+
+    // Delete any files associated with the pdfprotect.
+    $context = context_module::instance($cm->id);
+    $fs = get_file_storage();
+    $fs->delete_area_files($context->id);
+
 
     $DB->delete_records("pdfprotect", ["id" => $pdfprotect->id]);
 
@@ -181,13 +209,13 @@ function pdfprotect_delete_instance($id) {
  * @param stdClass $coursemodule
  *
  * @return cached_cm_info info
+ *
  * @throws dml_exception
  */
 function pdfprotect_get_coursemodule_info($coursemodule) {
     global $CFG, $DB;
 
     require_once("{$CFG->libdir}/filelib.php");
-    require_once("{$CFG->dirroot}/mod/pdfprotect/locallib.php");
     require_once("{$CFG->libdir}/completionlib.php");
 
     if (!$pdfprotect = $DB->get_record("pdfprotect",
@@ -267,7 +295,6 @@ function pdfprotect_get_file_info($browser, $areas, $course, $cm, $context, $fil
                 return null;
             }
         }
-        require_once("{$CFG->dirroot}/mod/pdfprotect/locallib.php");
 
         return new pdfprotect_content_file_info(
             $browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
@@ -349,7 +376,7 @@ function pdfprotect_pluginfile($course, $cm, $context, $filearea, $args, $forced
 
     $file = $fs->get_file_instance($filerecord);
 
-    \core\session\manager::write_close();
+    manager::write_close();
 
     header('Content-Disposition: attachment; filename="' . $options['filename'] . '"');
     header("Cache-Control:private max-age=1, no-transform");
@@ -456,6 +483,8 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
         echo $buffer;
         $left -= $size;
     }
+
+    exit;
 }
 
 /**
@@ -536,7 +565,7 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
         "objectid" => $pdfprotect->id,
     ];
 
-    $event = \mod_pdfprotect\event\course_module_viewed::create($params);
+    $event = course_module_viewed::create($params);
     $event->add_record_snapshot("course_modules", $cm);
     $event->add_record_snapshot("course", $course);
     $event->add_record_snapshot("pdfprotect", $pdfprotect);
@@ -574,13 +603,150 @@ function pdfprotect_dndupload_register() {
  * @throws dml_exception
  */
 function pdfprotect_dndupload_handle($uploadinfo) {
-    $data = new stdClass();
-    $data->course = $uploadinfo->course->id;
-    $data->name = $uploadinfo->displayname;
-    $data->intro = "";
-    $data->introformat = FORMAT_HTML;
-    $data->coursemodule = $uploadinfo->coursemodule;
-    $data->files = $uploadinfo->draftitemid;
+    $pdfprotect = new stdClass();
+    $pdfprotect->course = $uploadinfo->course->id;
+    $pdfprotect->name = $uploadinfo->displayname;
+    $pdfprotect->intro = "";
+    $pdfprotect->introformat = FORMAT_HTML;
+    $pdfprotect->coursemodule = $uploadinfo->coursemodule;
+    $pdfprotect->files = $uploadinfo->draftitemid;
 
-    return pdfprotect_add_instance($data, null);
+    return pdfprotect_add_instance($pdfprotect);
+}
+
+/**
+ * Print pdfprotect header.
+ *
+ * @param object $pdfprotect
+ * @param object $cm
+ * @param object $course
+ *
+ * @return void
+ * @throws coding_exception
+ */
+function pdfprotect_print_header($pdfprotect, $cm, $course, $embed = false) {
+    global $PAGE, $OUTPUT;
+
+    $PAGE->set_title("{$course->shortname}: {$pdfprotect->name}");
+    $PAGE->set_heading($course->fullname);
+    $PAGE->set_activity_record($pdfprotect);
+    if ($embed) {
+        $PAGE->set_pagelayout("embedded");
+    }
+    echo $OUTPUT->header();
+}
+
+/**
+ * Print pdfprotect heading.
+ *
+ * @param object $pdfprotect
+ * @param object $cm
+ * @param object $course
+ * @param bool $notused This variable is no longer used
+ *
+ * @return void
+ */
+function pdfprotect_print_heading($pdfprotect, $cm, $course, $notused = false) {
+    global $OUTPUT;
+    echo $OUTPUT->heading(format_string($pdfprotect->name), 2);
+}
+
+/**
+ * Print pdfprotect introduction.
+ *
+ * @param object $pdfprotect
+ * @param object $cm
+ * @param object $course
+ * @param bool $ignoresettings print even if not specified in modedit
+ *
+ * @return void
+ */
+function pdfprotect_print_intro($pdfprotect, $cm, $course, $ignoresettings = false) {
+    global $OUTPUT;
+
+    if ($ignoresettings) {
+        $gotintro = trim(strip_tags($pdfprotect->intro));
+        if ($gotintro) {
+            echo $OUTPUT->box_start("mod_introbox", "pdfprotectintro");
+            if ($gotintro) {
+                echo format_module_intro("pdfprotect", $pdfprotect, $cm->id);
+            }
+            echo $OUTPUT->box_end();
+        }
+    }
+}
+
+/**
+ * Print warning that file can not be found.
+ *
+ * @param object $pdfprotect
+ * @param object $cm
+ * @param object $course
+ *
+ * @return void, does not return
+ * @throws coding_exception
+ */
+function pdfprotect_print_filenotfound($pdfprotect, $cm, $course) {
+    global $OUTPUT;
+
+    pdfprotect_print_header($pdfprotect, $cm, $course, true);
+    pdfprotect_print_heading($pdfprotect, $cm, $course);
+    pdfprotect_print_intro($pdfprotect, $cm, $course);
+    echo $OUTPUT->notification(get_string("filenotfound", "pdfprotect"));
+    echo $OUTPUT->footer();
+    die;
+}
+
+/**
+ * File browsing support class
+ */
+class pdfprotect_content_file_info extends file_info_stored {
+    /**
+     * Function get_parent
+     *
+     * @return file_info|null
+     */
+    public function get_parent() {
+        if ($this->lf->get_filepath() === "/" && $this->lf->get_filename() === ".") {
+            return $this->browser->get_file_info($this->context);
+        }
+
+        return parent::get_parent();
+    }
+
+    /**
+     * Function get_visible_name
+     *
+     * @return string
+     */
+    public function get_visible_name() {
+        if ($this->lf->get_filepath() === "/" && $this->lf->get_filename() === ".") {
+            return $this->topvisiblename;
+        }
+
+        return parent::get_visible_name();
+    }
+}
+
+/**
+ * Function pdfprotect_set_mainfile
+ *
+ * @param $pdfprotect
+ *
+ * @throws coding_exception
+ */
+function pdfprotect_set_mainfile($pdfprotect) {
+    $fs = get_file_storage();
+    $cmid = $pdfprotect->coursemodule;
+
+    $context = context_module::instance($cmid);
+    if ($pdfprotect->files) {
+        file_save_draft_area_files($pdfprotect->files, $context->id, "mod_pdfprotect", "content", 0, ["subdirs" => true]);
+    }
+    $files = $fs->get_area_files($context->id, "mod_pdfprotect", "content", 0, "sortorder", false);
+    if (count($files) == 1) {
+        // Only one file attached, set it as main file automatically.
+        $file = reset($files);
+        file_set_sortorder($context->id, "mod_pdfprotect", "content", 0, $file->get_filepath(), $file->get_filename(), 1);
+    }
 }
