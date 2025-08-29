@@ -1,0 +1,17 @@
+// Mobile
+body.body-pdfprotect-mobile-view {
+    height: 100%;
+    margin: 0;
+    #page {
+        background: transparent !important;
+        height: 100%;
+    }
+    // Hide VLibras
+    [vw] {
+        display: none !important;
+    }
+    .activity-header,
+    #header {
+        display: none;
+    }
+}

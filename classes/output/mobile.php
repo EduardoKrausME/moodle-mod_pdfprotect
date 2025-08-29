@@ -14,49 +14,64 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Index file.
- *
- * @package   mod_pdfprotect
- * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace mod_pdfprotect\output;
 
+use core_external\util;
+use Exception;
+use moodle_url;
+
 /**
- * Class mobile
+ * Output Mobile for mod_pdfprotect.
  *
- * @package mod_pdfprotect\output
+ * @package   mod_pdfprotect
+ * @copyright 2025 Eduardo Kraus {@link https://eduardokraus.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mobile {
+
     /**
      * Function mobile_course_view
      *
      * @param $args
      *
      * @return array
-     * @throws \coding_exception
+     * @throws Exception
      */
     public static function mobile_course_view($args) {
-        global $OUTPUT, $USER, $_COOKIE;
+        global $OUTPUT;
 
+        $url = new moodle_url("/mod/pdfprotect/view.php", [
+            "id" => $args["cmid"],
+            "token" => self::get_token(),
+        ]);
         $data = [
             "cmid" => $args["cmid"],
-            "session" => optional_param("wstoken", "", PARAM_TEXT),
-            "user_id" => $USER->id,
+            "iframe-url" => $url->out(false),
         ];
 
         return [
             "templates" => [
                 [
                     "id" => "main",
-                    "html" => $OUTPUT->render_from_template("mod_pdfprotect/mobile_view_page", $data),
+                    "html" => $OUTPUT->render_from_template("mod_pdfprotect/mobile", $data),
                 ],
             ],
-            "javascript" => file_get_contents(__DIR__ . "/mobile.js"),
+            "javascript" => "",
             "otherdata" => "",
             "files" => [],
         ];
+    }
+
+    /**
+     * Get Token from access
+     *
+     * @return int returns token id.
+     * @throws Exception
+     */
+    private static function get_token() {
+        global $DB;
+
+        $service = $DB->get_record("external_services", ["shortname" => MOODLE_OFFICIAL_MOBILE_SERVICE], "*", MUST_EXIST);
+        return util::generate_token_for_current_user($service)->token;
     }
 }

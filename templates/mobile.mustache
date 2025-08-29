@@ -15,15 +15,17 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_pdfprotect/mobile_view_page
+    @template mod_pdfprotect/mobile
 
     Example context (json):
     {
+        "cmid": 123,
+        "iframe-url": "https://example.com/video.mp4"
     }
 }}
-{{=<% %>=}}
-<core-format-text text='<iframe src="<% config.wwwroot %>/mod/pdfprotect/pdfjs-drm/html5/index.php?id=<% cmid %>&user_status=<% session %>&user_id=<% user_id %>"
-                  frameborder="0" allowfullscreen="allowfullscreen"
-                  style="width:100%;height:100%;"
-                  width="100%" height="100%" ></iframe>'>
-</core-format-text>
+
+<iframe id="iframe-{{{cmid}}}"
+        src="{{{iframe-url}}}" style="height: 100vh; width: 100%;"
+        webkitallowfullscreen mozallowfullscreen allowfullscreen
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        sandbox="allow-scripts allow-forms allow-same-origin allow-modals"></iframe>

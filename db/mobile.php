@@ -18,7 +18,7 @@
  * mobile file.
  *
  * @package   mod_pdfprotect
- * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
+ * @copyright 2025 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,13 +28,16 @@ $addons = [
     "mod_pdfprotect" => [
         "handlers" => [
             "coursepdfprotect" => [
-                "delegate" => "CoreCourseModuleDelegate",
-                "method" => "mobile_course_view",
                 "displaydata" => [
-                    "icon" => "{$CFG->wwwroot }/mod/pdfprotect/pix/icon.png",
+                    "icon" => "{$CFG->wwwroot}/mod/pdfprotect/pix/icon.svg",
                     "class" => "",
                 ],
+                "delegate" => "CoreCourseModuleDelegate",
+                "method" => "mobile_course_view",
             ],
+        ],
+        "lang" => [
+            ["pluginname", "mod_pdfprotect"],
         ],
     ],
 ];
