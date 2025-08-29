@@ -49,6 +49,8 @@ if ($token = optional_param("token", false, PARAM_TEXT)) {
 
     if ($user) {
         \core\session\manager::login_user($user);
+        $PAGE->set_pagelayout("embedded");
+        $PAGE->add_body_class("body-pdfprotect-mobile-view");
     }
     require_course_login($course, false, null, false, true);
 } else {
@@ -64,8 +66,6 @@ $PAGE->set_url('/mod/pdfprotect/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($pdfprotect->name));
 $PAGE->set_heading($course->fullname);
 $PAGE->set_cm($cm, $course);
-$PAGE->set_pagelayout("embedded");
-$PAGE->add_body_class("body-pdfprotect-mobile-view");
  
 echo $OUTPUT->header();
 
