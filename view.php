@@ -66,7 +66,7 @@ $PAGE->set_url('/mod/pdfprotect/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($pdfprotect->name));
 $PAGE->set_heading($course->fullname);
 $PAGE->set_cm($cm, $course);
- 
+
 echo $OUTPUT->header();
 
 echo $OUTPUT->render_from_template('mod_pdfprotect/view_page', ['id' => $id]);
