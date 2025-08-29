@@ -18,7 +18,7 @@
  * The mod_pdfprotect course module viewed event.
  *
  * @package   mod_pdfprotect
- * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
+ * @copyright 2025 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,7 +28,7 @@ namespace mod_pdfprotect\event;
  * The mod_pdfprotect course module viewed event class.
  *
  * @package    mod_pdfprotect
- * @copyright 2025 Eduardo kraus (http://eduardokraus.com)
+ * @copyright 2025 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_viewed extends \core\event\course_module_viewed {

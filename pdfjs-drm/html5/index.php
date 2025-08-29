@@ -4,7 +4,7 @@
  * pdfprotect module version information
  *
  * @package    mod_pdfprotect
- * @copyright  2021 Eduardo Kraus {@link http://eduardokraus.com}
+ * @copyright  2021 Eduardo Kraus {@link https://eduardokraus.com}
  */
 
 header('Access-Control-Allow-Origin: *');
