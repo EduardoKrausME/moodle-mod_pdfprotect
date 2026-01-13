@@ -1,0 +1,15 @@
+body.body-pdfprotect-mobile-view {
+  height: 100%;
+  margin: 0;
+}
+body.body-pdfprotect-mobile-view #page {
+  background: transparent !important;
+  height: 100%;
+}
+body.body-pdfprotect-mobile-view [vw] {
+  display: none !important;
+}
+body.body-pdfprotect-mobile-view .activity-header,
+body.body-pdfprotect-mobile-view #header {
+  display: none;
+}
