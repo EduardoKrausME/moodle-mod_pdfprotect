@@ -19,8 +19,6 @@ namespace mod_pdfprotect\output;
 use context_module;
 use moodle_url;
 
-defined("MOODLE_INTERNAL") || die();
-
 /**
  * Output Mobile for mod_pdfprotect.
  *
