@@ -31,13 +31,15 @@ require_once("{$CFG->libdir}/filelib.php");
 /**
  * Class mod_pdfprotect_mod_form
  */
-class mod_pdfprotect_mod_form extends moodleform_mod {
+class mod_pdfprotect_mod_form extends moodleform_mod
+{
     /**
      * Function definition
      */
-    public function definition() {
+    public function definition()
+    {
         global $CFG;
-        $mform =& $this->_form;
+        $mform = &$this->_form;
 
         $mform->addElement("header", "general", get_string("general", "form"));
         $mform->addElement("text", "name", get_string("name"), ["size" => "48"]);
@@ -76,7 +78,8 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
      *
      * @param $defaultvalues
      */
-    public function data_preprocessing(&$defaultvalues) {
+    public function data_preprocessing(&$defaultvalues)
+    {
         if ($this->current->instance) {
             $draftitemid = file_get_submitted_draft_itemid("files");
             file_prepare_draft_area($draftitemid, $this->context->id, "mod_pdfprotect", "content", 0, ["subdirs" => true]);
@@ -87,12 +90,8 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
     /**
      * Function definition_after_data
      */
-    public function definition_after_data() {
-        if ($this->current->instance) {
-            // Pdfprotect not migrated yet.
-            return;
-        }
-
+    public function definition_after_data()
+    {
         parent::definition_after_data();
     }
 
@@ -105,7 +104,8 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
      * @return mixed
      * @throws coding_exception
      */
-    public function validation($data, $files) {
+    public function validation($data, $files)
+    {
         global $USER;
 
         $errors = parent::validation($data, $files);
@@ -130,8 +130,15 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
             // Set a default main file.
             if (!$mainfile) {
                 $file = reset($files);
-                file_set_sortorder($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(),
-                    $file->get_filepath(), $file->get_filename(), 1);
+                file_set_sortorder(
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea(),
+                    $file->get_itemid(),
+                    $file->get_filepath(),
+                    $file->get_filename(),
+                    1
+                );
             }
         }
         return $errors;

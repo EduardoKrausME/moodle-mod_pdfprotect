@@ -37,7 +37,8 @@ require_once("{$CFG->dirroot}/mod/pdfprotect/lib.php");
  *
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
-function pdfprotect_supports($feature) {
+function pdfprotect_supports($feature)
+{
     switch ($feature) {
         case FEATURE_GROUPS:
             return true;
@@ -73,7 +74,8 @@ function pdfprotect_supports($feature) {
  *
  * @return array
  */
-function pdfprotect_get_extra_capabilities() {
+function pdfprotect_get_extra_capabilities()
+{
     return ["moodle/site:accessallgroups"];
 }
 
@@ -84,7 +86,8 @@ function pdfprotect_get_extra_capabilities() {
  *
  * @return array status array
  */
-function pdfprotect_reset_userdata($data) {
+function pdfprotect_reset_userdata($data)
+{
     return [];
 }
 
@@ -98,7 +101,8 @@ function pdfprotect_reset_userdata($data) {
  *
  * @return array
  */
-function pdfprotect_get_view_actions() {
+function pdfprotect_get_view_actions()
+{
     return ["view", "view all"];
 }
 
@@ -112,7 +116,8 @@ function pdfprotect_get_view_actions() {
  *
  * @return array
  */
-function pdfprotect_get_post_actions() {
+function pdfprotect_get_post_actions()
+{
     return ["update", "add"];
 }
 
@@ -126,7 +131,8 @@ function pdfprotect_get_post_actions() {
  * @throws dml_exception
  * @throws coding_exception
  */
-function pdfprotect_add_instance($pdfprotect, $mform = null) {
+function pdfprotect_add_instance($pdfprotect, $mform = null)
+{
     global $DB;
     $cmid = $pdfprotect->coursemodule;
     $pdfprotect->timemodified = time();
@@ -150,7 +156,8 @@ function pdfprotect_add_instance($pdfprotect, $mform = null) {
  * @throws dml_exception
  * @throws coding_exception
  */
-function pdfprotect_update_instance($pdfprotect, $mform) {
+function pdfprotect_update_instance($pdfprotect, $mform)
+{
     global $DB;
     $pdfprotect->timemodified = time();
     $pdfprotect->id = $pdfprotect->instance;
@@ -172,7 +179,8 @@ function pdfprotect_update_instance($pdfprotect, $mform) {
  *
  * @throws Exception
  */
-function pdfprotect_delete_instance($id) {
+function pdfprotect_delete_instance($id)
+{
     global $DB;
 
     if (!$pdfprotect = $DB->get_record("pdfprotect", ["id" => $id])) {
@@ -207,15 +215,18 @@ function pdfprotect_delete_instance($id) {
  *
  * @throws dml_exception
  */
-function pdfprotect_get_coursemodule_info($coursemodule) {
+function pdfprotect_get_coursemodule_info($coursemodule)
+{
     global $CFG, $DB;
 
     require_once("{$CFG->libdir}/filelib.php");
     require_once("{$CFG->libdir}/completionlib.php");
 
-    if (!$pdfprotect = $DB->get_record("pdfprotect",
+    if (!$pdfprotect = $DB->get_record(
+        "pdfprotect",
         ["id" => $coursemodule->instance],
-        "id, name, display, revision, intro, introformat")) {
+        "id, name, display, revision, intro, introformat"
+    )) {
         return null;
     }
 
@@ -241,7 +252,8 @@ function pdfprotect_get_coursemodule_info($coursemodule) {
  * @return array
  * @throws coding_exception
  */
-function pdfprotect_get_file_areas($course, $cm, $context) {
+function pdfprotect_get_file_areas($course, $cm, $context)
+{
     $areas = [];
     $areas["content"] = get_string("pdfprotectcontent", "pdfprotect");
 
@@ -267,7 +279,8 @@ function pdfprotect_get_file_areas($course, $cm, $context) {
  * @return file_info instance or null if not found
  * @throws coding_exception
  */
-function pdfprotect_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+function pdfprotect_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename)
+{
     global $CFG;
 
     if (!has_capability("moodle/course:managefiles", $context)) {
@@ -292,7 +305,16 @@ function pdfprotect_get_file_info($browser, $areas, $course, $cm, $context, $fil
         }
 
         return new pdfprotect_content_file_info(
-            $browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
+            $browser,
+            $context,
+            $storedfile,
+            $urlbase,
+            $areas[$filearea],
+            true,
+            true,
+            true,
+            false
+        );
     }
 
     // Note: pdfprotect_intro handled in file_browser automatically.
@@ -318,7 +340,8 @@ function pdfprotect_get_file_info($browser, $areas, $course, $cm, $context, $fil
  * @throws coding_exception
  * @throws dml_exception
  */
-function pdfprotect_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
+function pdfprotect_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = [])
+{
     global $DB;
 
     require_course_login($course, true, $cm);
@@ -398,7 +421,8 @@ function pdfprotect_pluginfile($course, $cm, $context, $filearea, $args, $forced
  *
  * @return void
  */
-function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
+function pdfprotect_readfile_accel($file, $mimetype, $accelerate)
+{
     global $CFG;
 
     $contenthash = $file->get_contenthash();
@@ -492,7 +516,8 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
  * @return array
  * @throws coding_exception
  */
-function pdfprotect_page_type_list($pagetype, $parentcontext, $currentcontext) {
+function pdfprotect_page_type_list($pagetype, $parentcontext, $currentcontext)
+{
     $modulepagetype = ["mod-pdfprotect-*" => get_string("page-mod-pdfprotect-x", "pdfprotect")];
 
     return $modulepagetype;
@@ -508,7 +533,8 @@ function pdfprotect_page_type_list($pagetype, $parentcontext, $currentcontext) {
  * @throws coding_exception
  * @throws dml_exception
  */
-function pdfprotect_export_contents($cm, $baseurl) {
+function pdfprotect_export_contents($cm, $baseurl)
+{
     global $CFG, $DB;
 
     $contents = [];
@@ -553,7 +579,8 @@ function pdfprotect_export_contents($cm, $baseurl) {
  * @since Moodle 3.0
  * @throws coding_exception
  */
-function pdfprotect_view($pdfprotect, $course, $cm, $context) {
+function pdfprotect_view($pdfprotect, $course, $cm, $context)
+{
     // Trigger course_module_viewed event.
     $params = [
         "context" => $context,
@@ -569,6 +596,10 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
     // Completion.
     $completion = new completion_info($course);
     $completion->set_module_viewed($cm);
+
+    if ($completion->is_enabled($cm)) {
+        $completion->update_state($cm, COMPLETION_COMPLETE);
+    }
 }
 
 /**
@@ -577,8 +608,10 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
  * @return array containing details of the files / types the mod can handle
  * @throws coding_exception
  */
-function pdfprotect_dndupload_register() {
-    return ["files" =>
+function pdfprotect_dndupload_register()
+{
+    return [
+        "files" =>
         [
             [
                 "extension" => "pdf",
@@ -597,7 +630,8 @@ function pdfprotect_dndupload_register() {
  * @throws coding_exception
  * @throws dml_exception
  */
-function pdfprotect_dndupload_handle($uploadinfo) {
+function pdfprotect_dndupload_handle($uploadinfo)
+{
     $pdfprotect = new stdClass();
     $pdfprotect->course = $uploadinfo->course->id;
     $pdfprotect->name = $uploadinfo->displayname;
@@ -619,7 +653,8 @@ function pdfprotect_dndupload_handle($uploadinfo) {
  * @return void
  * @throws coding_exception
  */
-function pdfprotect_print_header($pdfprotect, $cm, $course, $embed = false) {
+function pdfprotect_print_header($pdfprotect, $cm, $course, $embed = false)
+{
     global $PAGE, $OUTPUT;
 
     $PAGE->set_title("{$course->shortname}: {$pdfprotect->name}");
@@ -641,7 +676,8 @@ function pdfprotect_print_header($pdfprotect, $cm, $course, $embed = false) {
  *
  * @return void
  */
-function pdfprotect_print_heading($pdfprotect, $cm, $course, $notused = false) {
+function pdfprotect_print_heading($pdfprotect, $cm, $course, $notused = false)
+{
     global $OUTPUT;
     echo $OUTPUT->heading(format_string($pdfprotect->name), 2);
 }
@@ -656,7 +692,8 @@ function pdfprotect_print_heading($pdfprotect, $cm, $course, $notused = false) {
  *
  * @return void
  */
-function pdfprotect_print_intro($pdfprotect, $cm, $course, $ignoresettings = false) {
+function pdfprotect_print_intro($pdfprotect, $cm, $course, $ignoresettings = false)
+{
     global $OUTPUT;
 
     if ($ignoresettings) {
@@ -681,7 +718,8 @@ function pdfprotect_print_intro($pdfprotect, $cm, $course, $ignoresettings = fal
  * @return void, does not return
  * @throws coding_exception
  */
-function pdfprotect_print_filenotfound($pdfprotect, $cm, $course) {
+function pdfprotect_print_filenotfound($pdfprotect, $cm, $course)
+{
     global $OUTPUT;
 
     pdfprotect_print_header($pdfprotect, $cm, $course, true);
@@ -695,13 +733,15 @@ function pdfprotect_print_filenotfound($pdfprotect, $cm, $course) {
 /**
  * File browsing support class
  */
-class pdfprotect_content_file_info extends file_info_stored {
+class pdfprotect_content_file_info extends file_info_stored
+{
     /**
      * Function get_parent
      *
      * @return file_info|null
      */
-    public function get_parent() {
+    public function get_parent()
+    {
         if ($this->lf->get_filepath() === "/" && $this->lf->get_filename() === ".") {
             return $this->browser->get_file_info($this->context);
         }
@@ -714,7 +754,8 @@ class pdfprotect_content_file_info extends file_info_stored {
      *
      * @return string
      */
-    public function get_visible_name() {
+    public function get_visible_name()
+    {
         if ($this->lf->get_filepath() === "/" && $this->lf->get_filename() === ".") {
             return $this->topvisiblename;
         }
@@ -730,7 +771,8 @@ class pdfprotect_content_file_info extends file_info_stored {
  *
  * @throws coding_exception
  */
-function pdfprotect_set_mainfile($pdfprotect) {
+function pdfprotect_set_mainfile($pdfprotect)
+{
     $fs = get_file_storage();
     $cmid = $pdfprotect->coursemodule;
 
