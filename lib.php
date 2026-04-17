@@ -460,6 +460,8 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
             }
             if ($ranges) {
                 byteserving_send_file($handle, $mimetype, $ranges, $file->get_filesize());
+                fclose($handle);
+                exit;
             }
         }
     } else {
@@ -484,12 +486,14 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
         $size = min($left, 65536);
         $buffer = fread($handle, $size);
         if ($buffer === false) {
+            fclose($handle);
             return;
         }
         echo $buffer;
         $left -= $size;
     }
 
+    fclose($handle);
     exit;
 }
 
