@@ -87,6 +87,15 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
     }
 
     /**
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
+     *
+     * Function definition_after_data
+     */
+    public function definition_after_data() {
+        parent::definition_after_data();
+    }
+
+    /**
      * Function validation
      *
      * @param $data
