@@ -58,7 +58,9 @@ if ($completion->is_enabled($cm)) {
 $PAGE->set_url('/mod/pdfprotect/view.php', ['id' => $cm->id]);
 
 $fs = get_file_storage();
-$files = $fs->get_area_files($context->id, 'mod_pdfprotect', 'content', 0, 'sortorder DESC, id ASC', false); // TODO: this is not very efficient!!
+$files = $fs->get_area_files(
+    $context->id, 'mod_pdfprotect', 'content', 0, 'sortorder DESC, id ASC', false
+); // TODO: this is not very efficient!!
 if (count($files) < 1) {
     pdfprotect_print_filenotfound($pdfprotect, $cm, $course);
     die;
@@ -76,14 +78,13 @@ $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, false);
 
 $fullurl = str_replace('.pdf', '.drm', $fullurl);
 
-
 $lang = $USER->lang;
 if (isset($_SESSION["SESSION"]->lang)) {
     $lang = $_SESSION["SESSION"]->lang;
 }
 
 if (strpos($lang, "_")) {
-    list($firtlang, $lastlang) = explode("_", $lang);
+    [$firtlang, $lastlang] = explode("_", $lang);
     $lastlang = strtoupper($lastlang);
 
     $testlang = "{$firtlang}-{$lastlang}";
@@ -116,7 +117,8 @@ PDF Protect by DRM
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?php echo $pdfprotect->name ?></title>
+    <title><?php
+        echo $pdfprotect->name ?></title>
     <script>
         var DEFAULT_URL = '<?php echo $fullurl; ?>?amazon=false';
     </script>
@@ -127,7 +129,8 @@ PDF Protect by DRM
     <script src="default_preferences.min.js"></script>
     <script src="viewer.min.js"></script>
     <link rel="resource" type="application/l10n"
-        href="../external/webL10n/locales/<?php echo $uselang ?>/viewer.properties">
+          href="../external/webL10n/locales/<?php
+          echo $uselang ?>/viewer.properties">
     <style>
         .toolbarButton.fullscreen {
             display: flex;
@@ -180,7 +183,7 @@ PDF Protect by DRM
 
                 <div class="splitToolbarButton">
                     <button class="toolbarButton findPrevious" title="" id="findPrevious" tabindex="92"
-                        data-l10n-id="find_previous">
+                            data-l10n-id="find_previous">
                         <span data-l10n-id="find_previous_label">Anterior</span>
                     </button>
                     <div class="splitToolbarButtonSeparator"></div>
@@ -202,69 +205,75 @@ PDF Protect by DRM
                     <div id="toolbarViewer">
                         <div id="toolbarViewerLeft">
                             <button id="sidebarToggle" class="toolbarButton" title="Mostrar Miniaturas" tabindex="11"
-                                data-l10n-id="toggle_sidebar">
+                                    data-l10n-id="toggle_sidebar">
                                 <span data-l10n-id="toggle_sidebar_label">Mostrar Miniaturas</span>
                             </button>
                             <div class="toolbarButtonSpacer"></div>
                             <button id="viewFind" class="toolbarButton group hiddenSmallView" title="Buscar no Documento"
-                                tabindex="12" data-l10n-id="findbar">
+                                    tabindex="12" data-l10n-id="findbar">
                                 <span data-l10n-id="findbar_label">Buscar</span>
                             </button>
                             <div class="splitToolbarButton">
                                 <button class="toolbarButton pageUp" title="Página anterior" id="previous" tabindex="13"
-                                    data-l10n-id="previous">
+                                        data-l10n-id="previous">
                                     <span data-l10n-id="previous_label">Anterior</span>
                                 </button>
                                 <div class="splitToolbarButtonSeparator"></div>
                                 <button class="toolbarButton pageDown" title="Próxima Página" id="next" tabindex="14"
-                                    data-l10n-id="next">
+                                        data-l10n-id="next">
                                     <span data-l10n-id="next_label">Próxima</span>
                                 </button>
                             </div>
                             <label id="pageNumberLabel" class="toolbarLabel" for="pageNumber"
-                                data-l10n-id="document_properties_page_count">Número de páginas: </label>
+                                   data-l10n-id="document_properties_page_count">Número de páginas: </label>
 
                             <input type="number" id="pageNumber" class="toolbarField pageNumber" value="1" size="4" min="1"
-                                tabindex="15">
+                                   tabindex="15">
                             <span id="numPages" class="toolbarLabel"></span>
                         </div>
                         <div class="outerCenter">
                             <div class="innerCenter" id="toolbarViewerMiddle">
                                 <div class="splitToolbarButton">
                                     <button id="zoomOut" class="toolbarButton zoomOut" title="Mais Zoom" tabindex="21"
-                                        data-l10n-id="zoom_out">
+                                            data-l10n-id="zoom_out">
                                         <span data-l10n-id="zoom_out_label">Mais Zoom</span>
                                     </button>
                                     <div class="splitToolbarButtonSeparator"></div>
                                     <button id="zoomIn" class="toolbarButton zoomIn" title="Menos Zoom" tabindex="22"
-                                        data-l10n-id="zoom_in">
+                                            data-l10n-id="zoom_in">
                                         <span data-l10n-id="zoom_in_label">Menos Zoom</span>
                                     </button>
                                 </div>
                                 <span id="scaleSelectContainer" class="dropdownToolbarButton">
-                                    <select id="scaleSelect" title="Zoom" tabindex="23" data-l10n-id="zoom">
-                                        <option id="pageAutoOption" value="auto"
-                                            data-l10n-id="page_scale_auto">Zoom Automático</option>
-                                        <option id="pageActualOption" value="page-actual" data-l10n-id="page_scale_actual">Tamanho atual</option>
-                                        <option id="pageFitOption" value="page-fit" data-l10n-id="page_scale_fit">Ajustar a página</option>
-                                        <option id="pageWidthOption" value="page-width" data-l10n-id="page_scale_width"
-                                            selected>Ajustar a largura</option>
-                                        <option id="customScaleOption" value="custom" hidden="true"></option>
-                                        <option value="0.5" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 50 }'>50%</option>
-                                        <option value="0.75" data-l10n-id="page_scale_percent"
-                                            data-l10n-args='{ "scale": 75 }'>75%</option>
-                                        <option value="1" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 100 }'>100%</option>
-                                        <option value="1.25" data-l10n-id="page_scale_percent"
-                                            data-l10n-args='{ "scale": 125 }'>125% </option>
-                                        <option value="1.5" data-l10n-id="page_scale_percent"
-                                            data-l10n-args='{ "scale": 150 }'>150% </option>
-                                        <option value="2" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 200 }'>200%</option>
-                                        <option value="3" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 300 }'>300%</option>
-                                        <option value="4" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 400 }'>400%</option>
-                                    </select>
-                                </span>
+                                        <select id="scaleSelect" title="Zoom" tabindex="23" data-l10n-id="zoom">
+                                            <option id="pageAutoOption" value="auto"
+                                                    data-l10n-id="page_scale_auto">Zoom Automático</option>
+                                            <option id="pageActualOption" value="page-actual" data-l10n-id="page_scale_actual">Tamanho atual</option>
+                                            <option id="pageFitOption" value="page-fit"
+                                                    data-l10n-id="page_scale_fit">Ajustar a página</option>
+                                            <option id="pageWidthOption" value="page-width" data-l10n-id="page_scale_width"
+                                                    selected>Ajustar a largura</option>
+                                            <option id="customScaleOption" value="custom" hidden="true"></option>
+                                            <option value="0.5" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 50 }'>50%</option>
+                                            <option value="0.75" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 75 }'>75%</option>
+                                            <option value="1" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 100 }'>100%</option>
+                                            <option value="1.25" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 125 }'>125% </option>
+                                            <option value="1.5" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 150 }'>150% </option>
+                                            <option value="2" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 200 }'>200%</option>
+                                            <option value="3" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 300 }'>300%</option>
+                                            <option value="4" data-l10n-id="page_scale_percent"
+                                                    data-l10n-args='{ "scale": 400 }'>400%</option>
+                                        </select>
+                                    </span>
                                 <button id="fullscreen" class="toolbarButton fullscreen" title="Tela cheia" tabindex="24"
-                                    data-l10n-id="fullscreen">
+                                        data-l10n-id="fullscreen">
                                     <span data-l10n-id="fullscreen_label">Tela cheia</span>
                                 </button>
                             </div>
@@ -287,7 +296,7 @@ PDF Protect by DRM
                 <menuitem id="contextPageRotateCw" label="Rotate Clockwise" data-l10n-id="page_rotate_cw">
                 </menuitem>
                 <menuitem id="contextPageRotateCcw" label="Rotate Counter-Clockwise"
-                    data-l10n-id="page_rotate_ccw">
+                          data-l10n-id="page_rotate_ccw">
                 </menuitem>
             </menu>
 
@@ -345,10 +354,10 @@ PDF Protect by DRM
     </div>
     <div id="printContainer"></div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var fullscreenButton = document.getElementById('fullscreen');
             if (fullscreenButton) {
-                fullscreenButton.addEventListener('click', function() {
+                fullscreenButton.addEventListener('click', function () {
                     toggleFullScreen();
                 });
             }
