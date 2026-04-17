@@ -23,9 +23,32 @@
         "iframe-url": "https://example.com/video.mp4"
     }
 }}
+{{=<% %>=}}
 
-<iframe id="iframe-{{{cmid}}}"
-        src="{{{iframe-url}}}" style="height: 100vh; width: 100%;"
-        webkitallowfullscreen mozallowfullscreen allowfullscreen
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        sandbox="allow-scripts allow-forms allow-same-origin allow-modals"></iframe>
+<div class="mod-pdfprotect-mobile">
+    <core-course-module-description
+            description="<% description %>"
+            component="mod_pdfprotect"
+            componentId="<% cmid %>">
+    </core-course-module-description>
+
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title><% name %></ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+            <p>{{ "plugin.mod_pdfprotect.mobileopeninfo" | translate }}</p>
+
+            <ion-button
+                    expand="block"
+                    href="<% viewurl %>"
+                    core-link
+                    [capture]="false"
+                    [autoLogin]="'yes'"
+                    [inApp]="true">
+                {{ "plugin.mod_pdfprotect.mobileopen" | translate }}
+            </ion-button>
+        </ion-card-content>
+    </ion-card>
+</div>

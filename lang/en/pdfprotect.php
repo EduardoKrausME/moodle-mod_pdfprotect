@@ -27,6 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 $string['contentheader'] = 'Content';
 $string['dnduploadpdfprotect'] = 'Create new PDF Protect';
 $string['filenotfound'] = 'File not found!';
+$string['mobileopen'] = 'Open protected PDF';
+$string['mobileopeninfo'] = 'To view this protected PDF in the app, open it in the embedded browser.';
 $string['modulename'] = 'PDF Protect';
 $string['modulename_help'] = 'The PDF Protect module provides a highly secure system against PDF downloads in Moodle';
 $string['modulenameplural'] = 'PDF Protects';

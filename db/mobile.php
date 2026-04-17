@@ -38,6 +38,8 @@ $addons = [
         ],
         "lang" => [
             ["pluginname", "mod_pdfprotect"],
+            ["mobileopen", "mod_pdfprotect"],
+            ["mobileopeninfo", "mod_pdfprotect"],
         ],
     ],
 ];

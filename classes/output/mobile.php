@@ -16,62 +16,63 @@
 
 namespace mod_pdfprotect\output;
 
-use core_external\util;
-use Exception;
+use context_module;
 use moodle_url;
+
+defined("MOODLE_INTERNAL") || die();
 
 /**
  * Output Mobile for mod_pdfprotect.
  *
- * @package   mod_pdfprotect
- * @copyright 2025 Eduardo Kraus {@link https://eduardokraus.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_pdfprotect
+ * @copyright 2025 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mobile {
 
     /**
-     * Function mobile_course_view
+     * Render the activity inside the Moodle App.
      *
-     * @param $args
-     *
+     * @param array $args
      * @return array
-     * @throws Exception
+     * @throws \coding_exception
+     * @throws \core\exception\moodle_exception
+     * @throws \dml_exception
+     * @throws \required_capability_exception
      */
     public static function mobile_course_view($args) {
-        global $OUTPUT;
+        global $DB, $OUTPUT;
 
-        $url = new moodle_url("/mod/pdfprotect/view.php", [
-            "id" => $args["cmid"],
-            "token" => self::get_token(),
-        ]);
+        $cmid = (int)($args["cmid"] ?? 0);
+        $cm = get_coursemodule_from_id("pdfprotect", $cmid, 0, false, MUST_EXIST);
+
+        $context = context_module::instance($cm->id);
+        require_capability("mod/pdfprotect:view", $context);
+
+        $pdfprotect = $DB->get_record(
+            "pdfprotect",
+            ["id" => $cm->instance],
+            "id, course, name, intro, introformat",
+            MUST_EXIST
+        );
+
         $data = [
-            "cmid" => $args["cmid"],
-            "iframe-url" => $url->out(false),
+            "cmid" => $cm->id,
+            "name" => format_string($pdfprotect->name, true, ["context" => $context]),
+            "description" => format_module_intro("pdfprotect", $pdfprotect, $cm->id, false),
+            "viewurl" => (new moodle_url("/mod/pdfprotect/view.php", [
+                "id" => $cm->id,
+            ]))->out(false),
         ];
 
         return [
-            "templates" => [
-                [
-                    "id" => "main",
-                    "html" => $OUTPUT->render_from_template("mod_pdfprotect/mobile", $data),
-                ],
-            ],
+            "templates" => [[
+                "id" => "main",
+                "html" => $OUTPUT->render_from_template("mod_pdfprotect/mobile", $data),
+            ]],
             "javascript" => "",
             "otherdata" => "",
             "files" => [],
         ];
-    }
-
-    /**
-     * Get Token from access
-     *
-     * @return int returns token id.
-     * @throws Exception
-     */
-    private static function get_token() {
-        global $DB;
-
-        $service = $DB->get_record("external_services", ["shortname" => MOODLE_OFFICIAL_MOBILE_SERVICE], "*", MUST_EXIST);
-        return util::generate_token_for_current_user($service)->token;
     }
 }
