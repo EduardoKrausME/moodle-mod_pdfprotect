@@ -47,13 +47,13 @@ $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('pdfprotect', $pdfprotect);
 $event->trigger();
 
-// Update 'viewed' state if required by completion system
+// Completion: set_module_viewed() handles view-based automatic completion
+// internally.  Do NOT call update_state(COMPLETION_COMPLETE) here; doing so
+// unconditionally overrides manual completion mode and auto-marks the activity
+// as done every time the PDF iframe loads (including after returning from the
+// activity settings page).
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
-
-if ($completion->is_enabled($cm)) {
-    $completion->update_state($cm, COMPLETION_COMPLETE);
-}
 
 $PAGE->set_url('/mod/pdfprotect/view.php', ['id' => $cm->id]);
 
