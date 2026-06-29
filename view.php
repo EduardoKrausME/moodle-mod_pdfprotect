@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\session\manager;
+
 require('../../config.php');
 require_once($CFG->libdir . '/completionlib.php');
 
@@ -42,15 +44,21 @@ if ($r) {
 
 $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
 
+$mobileappview = false;
 if ($token = optional_param("token", false, PARAM_TEXT)) {
     $externalservice = $DB->get_record("external_services", ["shortname" => MOODLE_OFFICIAL_MOBILE_SERVICE]);
-    $externaltoken = $DB->get_record("external_tokens", ["token" => $token, "externalserviceid" => $externalservice->id], "userid");
-    $user = $DB->get_record("user", ["id" => $externaltoken->userid]);
-
-    if ($user) {
-        \core\session\manager::login_user($user);
-        $PAGE->set_pagelayout("embedded");
-        $PAGE->add_body_class("body-pdfprotect-mobile-view");
+    if ($externalservice) {
+        $externaltoken = $DB->get_record("external_tokens", [
+            "token" => $token,
+            "externalserviceid" => $externalservice->id,
+        ], "userid");
+        if ($externaltoken) {
+            $user = $DB->get_record("user", ["id" => $externaltoken->userid]);
+            if ($user) {
+                manager::login_user($user);
+                $mobileappview = true;
+            }
+        }
     }
     require_course_login($course, false, null, false, true);
 } else {
@@ -58,6 +66,13 @@ if ($token = optional_param("token", false, PARAM_TEXT)) {
 }
 $context = context_module::instance($cm->id);
 require_capability('mod/pdfprotect:view', $context);
+
+if ($mobileappview) {
+    redirect(new moodle_url('/mod/pdfprotect/pdfjs-drm/html5/index.php', [
+        'id' => $cm->id,
+        'mobile' => 1,
+    ]));
+}
 
 // Completion and trigger events.
 pdfprotect_view($pdfprotect, $course, $cm, $context);
@@ -69,7 +84,7 @@ $PAGE->set_cm($cm, $course);
 
 echo $OUTPUT->header();
 
-echo $OUTPUT->render_from_template('mod_pdfprotect/view_page', ['id' => $id]);
+echo $OUTPUT->render_from_template('mod_pdfprotect/view_page', ['id' => $cm->id]);
 $PAGE->requires->js_call_amd("mod_pdfprotect/view_page", "init", []);
 
 echo $OUTPUT->footer();

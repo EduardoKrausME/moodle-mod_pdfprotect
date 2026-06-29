@@ -23,7 +23,6 @@
  */
 
 use core\session\manager;
-use core_completion\api;
 use mod_pdfprotect\event\course_module_viewed;
 
 defined('MOODLE_INTERNAL') || die;
@@ -138,11 +137,6 @@ function pdfprotect_add_instance($pdfprotect, $mform = null) {
     $DB->set_field("course_modules", "instance", $pdfprotect->id, ["id" => $cmid]);
     pdfprotect_set_mainfile($pdfprotect);
 
-    // Sync the expected-completion date with the Moodle calendar so it appears in
-    // the upcoming-events block, the site calendar, and the dashboard timeline.
-    $completionexpected = isset($pdfprotect->completionexpected) ? $pdfprotect->completionexpected : null;
-    api::update_completion_date_event($cmid, "pdfprotect", $pdfprotect->id, $completionexpected);
-
     return $pdfprotect->id;
 }
 
@@ -165,14 +159,6 @@ function pdfprotect_update_instance($pdfprotect, $mform) {
     $DB->update_record("pdfprotect", $pdfprotect);
 
     pdfprotect_set_mainfile($pdfprotect);
-
-    // Keep the expected-completion calendar event in sync with the value saved by
-    // the teacher.  This is what makes changes to the date appear in the upcoming-
-    // events block, the site calendar, and the dashboard timeline.
-    $completionexpected = isset($pdfprotect->completionexpected) ? $pdfprotect->completionexpected : null;
-    api::update_completion_date_event(
-        $pdfprotect->coursemodule, "pdfprotect", $pdfprotect->id, $completionexpected
-    );
 
     return true;
 }
@@ -596,12 +582,13 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
     $event->add_record_snapshot("pdfprotect", $pdfprotect);
     $event->trigger();
 
-    // Completion: set_module_viewed() internally calls update_state() only when
-    // completionview is required (automatic, view-based tracking).  For manual
-    // completion the call below is therefore intentionally the only one made here,
-    // so that the student's own "Mark as done" toggle is never overridden.
+    // Completion.
     $completion = new completion_info($course);
     $completion->set_module_viewed($cm);
+
+    if ($completion->is_enabled($cm)) {
+        $completion->update_state($cm, COMPLETION_COMPLETE);
+    }
 }
 
 /**

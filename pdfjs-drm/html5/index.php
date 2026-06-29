@@ -13,15 +13,40 @@ require('../../../../config.php');
 require_once("{$CFG->dirroot}/mod/pdfprotect/lib.php");
 require_once("{$CFG->libdir}/completionlib.php");
 
-$id = optional_param('id', 0, PARAM_INT); // Course Module ID
+$id = optional_param('id', 0, PARAM_INT); // Course Module ID.
+$mobile = optional_param('mobile', 0, PARAM_BOOL);
 
-$token = optional_param('user_status', false, PARAM_TEXT);
+$token = optional_param('token', '', PARAM_TEXT);
+if (!$token) {
+    // Backwards compatibility with the old mobile parameter used by this viewer.
+    $token = optional_param('user_status', '', PARAM_TEXT);
+}
+
 if ($token && !isloggedin()) {
-    $externaltokens = $DB->get_record('external_tokens', ['token' => $token], '*', IGNORE_MISSING);
+    $externaltokens = false;
+
+    if (defined('MOODLE_OFFICIAL_MOBILE_SERVICE')) {
+        $externalservice = $DB->get_record('external_services', [
+            'shortname' => MOODLE_OFFICIAL_MOBILE_SERVICE,
+        ], 'id', IGNORE_MISSING);
+        if ($externalservice) {
+            $externaltokens = $DB->get_record('external_tokens', [
+                'token' => $token,
+                'externalserviceid' => $externalservice->id,
+            ], '*', IGNORE_MISSING);
+        }
+    }
+
+    // Keep the old behaviour as a fallback for custom apps that still send user_status.
+    if (!$externaltokens) {
+        $externaltokens = $DB->get_record('external_tokens', ['token' => $token], '*', IGNORE_MISSING);
+    }
 
     if ($externaltokens) {
         $user = $DB->get_record('user', ['id' => $externaltokens->userid], '*', IGNORE_MISSING);
-        complete_user_login($user);
+        if ($user) {
+            complete_user_login($user);
+        }
     }
 }
 
@@ -47,13 +72,13 @@ $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('pdfprotect', $pdfprotect);
 $event->trigger();
 
-// Completion: set_module_viewed() handles view-based automatic completion
-// internally.  Do NOT call update_state(COMPLETION_COMPLETE) here; doing so
-// unconditionally overrides manual completion mode and auto-marks the activity
-// as done every time the PDF iframe loads (including after returning from the
-// activity settings page).
+// Update 'viewed' state if required by completion system
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
+
+if ($completion->is_enabled($cm)) {
+    $completion->update_state($cm, COMPLETION_COMPLETE);
+}
 
 $PAGE->set_url('/mod/pdfprotect/view.php', ['id' => $cm->id]);
 
@@ -121,6 +146,7 @@ PDF Protect by DRM
         echo $pdfprotect->name ?></title>
     <script>
         var DEFAULT_URL = '<?php echo $fullurl; ?>?amazon=false';
+        var PDFPROTECT_MOBILE_APP = <?php echo $mobile ? 'true' : 'false'; ?>;
     </script>
     <link rel="stylesheet" href="viewer.css">
     <script src="compatibility.min.js"></script>
@@ -157,10 +183,22 @@ PDF Protect by DRM
         .fullscreen-active::before {
             background-image: url('./images/fullscreen-exit.svg') !important;
         }
+
+        body.pdfprotect-mobile-app,
+        body.pdfprotect-mobile-app #outerContainer,
+        body.pdfprotect-mobile-app #mainContainer,
+        body.pdfprotect-mobile-app #viewerContainer {
+            overscroll-behavior: contain;
+        }
+
+        body.pdfprotect-mobile-app #viewerContainer {
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 
-<body tabindex="1" class="loadingInProgress" oncontextmenu="return false">
+<body tabindex="1" class="loadingInProgress<?php echo $mobile ? ' pdfprotect-mobile-app' : ''; ?>" oncontextmenu="return false">
     <script>
         // Dynamically load language.
         document.webL10n.setLanguage('<?php echo $uselang ?>');

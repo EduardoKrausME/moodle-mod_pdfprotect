@@ -41,7 +41,7 @@ class mobile {
     public static function mobile_course_view($args) {
         global $DB, $OUTPUT;
 
-        $cmid = (int)($args["cmid"] ?? 0);
+        $cmid = (int) ($args["cmid"] ?? 0);
         $cm = get_coursemodule_from_id("pdfprotect", $cmid, 0, false, MUST_EXIST);
 
         $context = context_module::instance($cm->id);
@@ -58,16 +58,22 @@ class mobile {
             "cmid" => $cm->id,
             "name" => format_string($pdfprotect->name, true, ["context" => $context]),
             "description" => format_module_intro("pdfprotect", $pdfprotect, $cm->id, false),
-            "viewurl" => (new moodle_url("/mod/pdfprotect/view.php", [
+            "viewurl" => new moodle_url("/mod/pdfprotect/view.php", [
                 "id" => $cm->id,
-            ]))->out(false),
+            ]),
+            "viewerurl" => new moodle_url("/mod/pdfprotect/pdfjs-drm/html5/index.php", [
+                "id" => $cm->id,
+                "mobile" => 1,
+            ]),
         ];
 
         return [
-            "templates" => [[
-                "id" => "main",
-                "html" => $OUTPUT->render_from_template("mod_pdfprotect/mobile", $data),
-            ]],
+            "templates" => [
+                [
+                    "id" => "main",
+                    "html" => $OUTPUT->render_from_template("mod_pdfprotect/mobile", $data),
+                ],
+            ],
             "javascript" => "",
             "otherdata" => "",
             "files" => [],

@@ -50,6 +50,9 @@
         PDFJS.cMapUrl = '../external/bcmaps/';
         PDFJS.cMapPacked = true;
         PDFJS.workerSrc = '../src/worker_loader.js';
+        if (window.PDFPROTECT_MOBILE_APP) {
+            PDFJS.disableHistory = true;
+        }
     }
 
     var DefaultExernalServices = {
