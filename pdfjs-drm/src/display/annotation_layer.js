@@ -101,6 +101,44 @@
      * @class
      * @alias AnnotationElement
      */
+    function updateAnnotationElementContainer(container, data, page, viewport) {
+        var width = data.rect[2] - data.rect[0];
+        var height = data.rect[3] - data.rect[1];
+
+        // Do *not* modify `data.rect`, since that will corrupt the annotation
+        // position on subsequent calls to `_createContainer` (see issue 6804).
+        var rect = Util.normalizeRect([
+            data.rect[0],
+            page.view[3] - data.rect[1] + page.view[1],
+            data.rect[2],
+            page.view[3] - data.rect[3] + page.view[1]
+        ]);
+
+        CustomStyle.setProp('transform', container,
+            'matrix(' + viewport.transform.join(',') + ')');
+        CustomStyle.setProp('transformOrigin', container,
+            -rect[0] + 'px ' + -rect[1] + 'px');
+
+        if (data.borderStyle && data.borderStyle.width > 0 &&
+            data.borderStyle.style !== AnnotationBorderStyleType.UNDERLINE) {
+            width = width - 2 * data.borderStyle.width;
+            height = height - 2 * data.borderStyle.width;
+        }
+
+        container.style.left = rect[0] + 'px';
+        container.style.top = rect[1] + 'px';
+        container.style.width = Math.max(width, 0) + 'px';
+        container.style.height = Math.max(height, 0) + 'px';
+    }
+
+    function updateAnnotationLayerDimensions(div, viewport) {
+        div.style.position = 'absolute';
+        div.style.left = 0;
+        div.style.top = 0;
+        div.style.width = Math.floor(viewport.width) + 'px';
+        div.style.height = Math.floor(viewport.height) + 'px';
+    }
+
     var AnnotationElement = (function AnnotationElementClosure() {
         function AnnotationElement(parameters, isRenderable) {
             this.isRenderable = isRenderable || false;
@@ -132,20 +170,7 @@
                 var height = data.rect[3] - data.rect[1];
 
                 container.setAttribute('data-annotation-id', data.id);
-
-                // Do *not* modify `data.rect`, since that will corrupt the annotation
-                // position on subsequent calls to `_createContainer` (see issue 6804).
-                var rect = Util.normalizeRect([
-                    data.rect[0],
-                    page.view[3] - data.rect[1] + page.view[1],
-                    data.rect[2],
-                    page.view[3] - data.rect[3] + page.view[1]
-                ]);
-
-                CustomStyle.setProp('transform', container,
-                    'matrix(' + viewport.transform.join(',') + ')');
-                CustomStyle.setProp('transformOrigin', container,
-                    -rect[0] + 'px ' + -rect[1] + 'px');
+                updateAnnotationElementContainer(container, data, page, viewport);
 
                 if (data.borderStyle.width > 0) {
                     container.style.borderWidth = data.borderStyle.width + 'px';
@@ -200,11 +225,10 @@
                     }
                 }
 
-                container.style.left = rect[0] + 'px';
-                container.style.top = rect[1] + 'px';
-
-                container.style.width = width + 'px';
-                container.style.height = height + 'px';
+                // The helper above already calculated the current position and size.
+                // Keep the local width/height variables for existing popup/trigger logic.
+                container.style.width = Math.max(width, 0) + 'px';
+                container.style.height = Math.max(height, 0) + 'px';
 
                 return container;
             },
@@ -862,6 +886,7 @@
              * @memberof AnnotationLayer
              */
             render : function AnnotationLayer_render(parameters) {
+                updateAnnotationLayerDimensions(parameters.div, parameters.viewport);
                 var annotationElementFactory = new AnnotationElementFactory();
 
                 for (var i = 0, ii = parameters.annotations.length; i < ii; i++) {
@@ -895,13 +920,23 @@
              * @memberof AnnotationLayer
              */
             update : function AnnotationLayer_update(parameters) {
+                updateAnnotationLayerDimensions(parameters.div, parameters.viewport);
+
                 for (var i = 0, ii = parameters.annotations.length; i < ii; i++) {
                     var data = parameters.annotations[i];
+                    if (!data) {
+                        continue;
+                    }
                     var element = parameters.div.querySelector(
                         '[data-annotation-id="' + data.id + '"]');
                     if (element) {
-                        CustomStyle.setProp('transform', element,
-                            'matrix(' + parameters.viewport.transform.join(',') + ')');
+                        if (element.className === 'popupAnnotation') {
+                            CustomStyle.setProp('transform', element,
+                                'matrix(' + parameters.viewport.transform.join(',') + ')');
+                        } else {
+                            updateAnnotationElementContainer(element, data,
+                                parameters.page, parameters.viewport);
+                        }
                     }
                 }
                 parameters.div.removeAttribute('hidden');
