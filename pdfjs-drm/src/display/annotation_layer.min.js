@@ -170,6 +170,7 @@
                 var height = data.rect[3] - data.rect[1];
 
                 container.setAttribute('data-annotation-id', data.id);
+
                 updateAnnotationElementContainer(container, data, page, viewport);
 
                 if (data.borderStyle.width > 0) {
@@ -887,6 +888,7 @@
              */
             render : function AnnotationLayer_render(parameters) {
                 updateAnnotationLayerDimensions(parameters.div, parameters.viewport);
+
                 var annotationElementFactory = new AnnotationElementFactory();
 
                 for (var i = 0, ii = parameters.annotations.length; i < ii; i++) {
