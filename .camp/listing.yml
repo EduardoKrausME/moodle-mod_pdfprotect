@@ -1,0 +1,23 @@
+# (RFC §4.1). Authors update their listing with an ordinary commit; camp
+# ingests and hash-pins it at each tagged release. Listing for mod_pdfprotect.
+
+name: "PDF Protect"
+summary: "Publish PDF documents with additional protection and control features."
+description: |
+  Publish PDF documents with additional protection and control features.
+
+  This is a Moodle module developed to provide an extra layer of security for PDF files, preventing users from downloading, printing, or copying the content of the PDF. It is ideal for protecting sensitive material and preventing unauthorized sharing of documents.
+
+  Key capabilities:
+  - Download Protection : Prevents downloading the PDF file.
+  - Print Block : Disables the print option for the PDF.
+  - Prevent Text Copying : Blocks copying content from the PDF, ensuring that the content cannot be easily copied.
+
+  Supported Moodle versions in the supplied plugin list: 4.0 - 5.0.
+
+labels:
+  - fully-free
+category: "administration"
+links:
+  docs: https://github.com/EduardoKrausME/moodle-mod_pdfprotect#readme
+  issues: https://github.com/EduardoKrausME/moodle-mod_pdfprotect/issues
