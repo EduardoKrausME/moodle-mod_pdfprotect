@@ -48,7 +48,7 @@ function pdfprotect_supports($feature) {
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
         case FEATURE_COMPLETION_HAS_RULES:
-            return true;
+            return false;
         case FEATURE_GRADE_HAS_GRADE:
             return false;
         case FEATURE_GRADE_OUTCOMES:
@@ -245,7 +245,7 @@ function pdfprotect_get_coursemodule_info($coursemodule) {
  */
 function pdfprotect_get_file_areas($course, $cm, $context) {
     $areas = [];
-    $areas["content"] = get_string("pdfprotectcontent", "pdfprotect");
+    $areas["content"] = get_string("pdfprotectcontent", "mod_pdfprotect");
 
     return $areas;
 }
@@ -508,7 +508,7 @@ function pdfprotect_readfile_accel($file, $mimetype, $accelerate) {
  * @throws coding_exception
  */
 function pdfprotect_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    $modulepagetype = ["mod-pdfprotect-*" => get_string("page-mod-pdfprotect-x", "pdfprotect")];
+    $modulepagetype = ["mod-pdfprotect-*" => get_string("page-mod-pdfprotect-x", "mod_pdfprotect")];
 
     return $modulepagetype;
 }
