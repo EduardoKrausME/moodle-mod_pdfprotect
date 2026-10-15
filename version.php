@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2026101200;
-$plugin->release = '3.3.1';
+$plugin->version = 2026101500;
+$plugin->release = '3.3.2';
 $plugin->requires = 2021041900;
 $plugin->component = 'mod_pdfprotect';
 $plugin->maturity = MATURITY_STABLE;
