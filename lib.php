@@ -152,6 +152,7 @@ function pdfprotect_add_instance($pdfprotect, $mform = null) {
  */
 function pdfprotect_update_instance($pdfprotect, $mform) {
     global $DB;
+
     $pdfprotect->timemodified = time();
     $pdfprotect->id = $pdfprotect->instance;
     $pdfprotect->revision++;
@@ -159,6 +160,24 @@ function pdfprotect_update_instance($pdfprotect, $mform) {
     $DB->update_record("pdfprotect", $pdfprotect);
 
     pdfprotect_set_mainfile($pdfprotect);
+
+    // Synchronise the expected-completion calendar event.
+    $cm = get_coursemodule_from_instance(
+        'pdfprotect',
+        $pdfprotect->id,
+        $pdfprotect->course,
+        false,
+        MUST_EXIST
+    );
+
+    \core_completion\api::update_completion_date_event(
+        $cm->id,
+        'pdfprotect',
+        $pdfprotect,
+        empty($cm->completionexpected)
+            ? null
+            : (int) $cm->completionexpected
+    );
 
     return true;
 }
