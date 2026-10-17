@@ -592,6 +592,53 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
 }
 
 /**
+ * Provide the action associated with a PDF Protect
+ * expected-completion event for the Timeline.
+ *
+ * @param calendar_event $event
+ * @param \core_calendar\action_factory $factory
+ * @param int $userid User ID for completion checks; 0 means current user.
+ * @return \core_calendar\local\event\entities\action_interface|null
+ */
+function pdfprotect_core_calendar_provide_event_action(
+    calendar_event $event,
+    \core_calendar\action_factory $factory,
+    $userid = 0
+) {
+    global $USER;
+
+    if (empty($userid)) {
+        $userid = $USER->id;
+    }
+
+    $modinfo = get_fast_modinfo($event->courseid, $userid);
+
+    if (empty($modinfo->instances['pdfprotect'][$event->instance])) {
+        return null;
+    }
+
+    $cm = $modinfo->instances['pdfprotect'][$event->instance];
+
+    if (!$cm->uservisible) {
+        return null;
+    }
+
+    $completion = new \completion_info($cm->get_course());
+    $completiondata = $completion->get_data($cm, false, $userid);
+
+    if ($completiondata->completionstate != COMPLETION_INCOMPLETE) {
+        return null;
+    }
+
+    return $factory->create_instance(
+        get_string('view'),
+        new \moodle_url('/mod/pdfprotect/view.php', ['id' => $cm->id]),
+        1,
+        true
+    );
+}
+
+/**
  * Register the ability to handle drag and drop file uploads
  *
  * @return array containing details of the files / types the mod can handle
