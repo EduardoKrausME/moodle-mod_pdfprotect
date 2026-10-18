@@ -68,6 +68,15 @@
     var PAGE_NUMBER_LOADING_INDICATOR = 'visiblePageIsLoading';
     var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
 
+    /**
+     * Read the administrative search setting from the viewer document.
+     *
+     * @return {boolean} Whether PDF text searching is allowed.
+     */
+    function pdfProtectSearchEnabled() {
+        return document.body && document.body.getAttribute("data-allow-search") === "true";
+    }
+
     function configure(PDFJS) {
         PDFJS.imageResourcesPath = './images/';
         PDFJS.cMapUrl = '../external/bcmaps/';
@@ -225,11 +234,9 @@
                 self.preferenceShowPreviousViewOnLoad = value;
             }), Preferences.get('defaultZoomValue').then(function resolved(value) {
                 self.preferenceDefaultZoomValue = value;
-            }), Preferences.get('disableTextLayer').then(function resolved(value) {
-                if (PDFJS.disableTextLayer === true) {
-                    return;
-                }
-                PDFJS.disableTextLayer = value;
+            }), Preferences.get('disableTextLayer').then(function resolved() {
+                // The server-rendered attribute must override stored PDF.js preferences.
+                PDFJS.disableTextLayer = !pdfProtectSearchEnabled();
             }), Preferences.get('disableRange').then(function resolved(value) {
                 if (PDFJS.disableRange === true) {
                     return;
@@ -1355,6 +1362,9 @@
     }
 
     function webViewerFind(e) {
+        if (!pdfProtectSearchEnabled()) {
+            return;
+        }
         PDFViewerApplication.findController.executeCommand('find' + e.type, {
             query         : e.query,
             phraseSearch  : e.phraseSearch,
@@ -1365,6 +1375,9 @@
     }
 
     function webViewerFindFromUrlHash(e) {
+        if (!pdfProtectSearchEnabled()) {
+            return;
+        }
         PDFViewerApplication.findController.executeCommand('find', {
             query         : e.query,
             phraseSearch  : e.phraseSearch,
@@ -1473,13 +1486,13 @@
         if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
             switch (evt.keyCode) {
                 case 70:
-                    if (!PDFViewerApplication.supportsIntegratedFind) {
+                    if (pdfProtectSearchEnabled() && !PDFViewerApplication.supportsIntegratedFind) {
                         PDFViewerApplication.findBar.open();
                         handled = true;
                     }
                     break;
                 case 71:
-                    if (!PDFViewerApplication.supportsIntegratedFind) {
+                    if (pdfProtectSearchEnabled() && !PDFViewerApplication.supportsIntegratedFind) {
                         var findState = PDFViewerApplication.findController.state;
                         if (findState) {
                             PDFViewerApplication.findController.executeCommand('findagain', {
