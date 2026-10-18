@@ -13,3 +13,163 @@ body.body-pdfprotect-mobile-view .activity-header,
 body.body-pdfprotect-mobile-view #header {
   display: none;
 }
+
+
+/* Optional Super Flipbook recommendation in the PDF Protect activity edit form. */
+.pdfprotect-superflipbook-banner {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 0 0 1.25rem;
+    padding: 1.15rem 3.25rem 1.15rem 1.15rem;
+    border: 1px solid #c9ddf3;
+    border-left: 4px solid #0f6cbf;
+    border-radius: 1rem;
+    background: linear-gradient(110deg, #eff7ff 0%, #ffffff 75%);
+    color: #1e3650;
+    box-shadow: 0 8px 25px rgba(23, 43, 77, .06);
+}
+.pdfprotect-superflipbook-banner__icon {
+    display: flex;
+    flex: 0 0 4.2rem;
+    align-items: center;
+    justify-content: center;
+    gap: .15rem;
+    height: 4.2rem;
+    border-radius: .9rem;
+    background: #dceeff;
+    color: #0a4f8f;
+    font-size: 1.04rem;
+    font-weight: 800;
+}
+.pdfprotect-superflipbook-banner__icon span {
+    color: #547a9c;
+}
+.pdfprotect-superflipbook-banner__content {
+    min-width: 0;
+    flex: 1;
+}
+.pdfprotect-superflipbook-banner__badge {
+    display: inline-block;
+    margin-bottom: .2rem;
+    color: #0a4f8f;
+    font-size: .71rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+.pdfprotect-superflipbook-banner h3 {
+    margin: 0;
+    color: #173c60;
+    font-size: 1.16rem;
+    font-weight: 800;
+}
+.pdfprotect-superflipbook-banner p {
+    margin: .4rem 0 .65rem;
+    color: #435972;
+    line-height: 1.5;
+}
+.pdfprotect-superflipbook-banner__benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem .95rem;
+    padding: 0;
+    margin: 0 0 .85rem;
+    list-style: none;
+    color: #2d526f;
+    font-size: .86rem;
+}
+.pdfprotect-superflipbook-banner__benefits li::before {
+    content: "✓";
+    margin-right: .35rem;
+    color: #137651;
+    font-weight: bold;
+}
+.pdfprotect-superflipbook-banner__link {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem .75rem;
+    border-radius: .65rem;
+    background: #0f6cbf;
+    color: #fff;
+    font-size: .87rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+.pdfprotect-superflipbook-banner__link:hover,
+.pdfprotect-superflipbook-banner__link:focus {
+    color: #fff;
+    background: #0a4f8f;
+    text-decoration: none;
+}
+.pdfprotect-superflipbook-banner__dismiss {
+    position: absolute;
+    top: .65rem;
+    right: .65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: .5rem;
+    background: transparent;
+    color: #4a6681;
+    cursor: pointer;
+    font-size: 1.45rem;
+    line-height: 1;
+}
+.pdfprotect-superflipbook-banner__dismiss:hover,
+.pdfprotect-superflipbook-banner__dismiss:focus-visible {
+    background: rgba(15, 108, 191, .1);
+    color: #0a4f8f;
+}
+.pdfprotect-superflipbook-banner__dismiss:disabled {
+    cursor: wait;
+    opacity: .55;
+}
+.pdfprotect-superflipbook-banner__error {
+    position: absolute;
+    right: .75rem;
+    bottom: .25rem;
+    color: #a92222;
+    font-size: .8rem;
+}
+.pdfprotect-superflipbook-banner__error[hidden] {
+    display: none;
+}
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner {
+    border-color: #3f5771;
+    border-left-color: #80bcf5;
+    background: linear-gradient(110deg, #1d3347 0%, #1d2734 85%);
+    color: #e2edf8;
+}
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner__icon {
+    background: #2e526e;
+    color: #e4f2ff;
+}
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner__icon span,
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner h3,
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner__badge,
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner__benefits {
+    color: #e2edf8;
+}
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner p,
+[data-bs-theme="dark"] .pdfprotect-superflipbook-banner__dismiss {
+    color: #bfcedb;
+}
+@media (max-width: 576px) {
+    .pdfprotect-superflipbook-banner {
+        gap: .75rem;
+        padding: 1rem 2.8rem 1rem 1rem;
+    }
+    .pdfprotect-superflipbook-banner__icon {
+        display: none;
+    }
+    .pdfprotect-superflipbook-banner__benefits {
+        display: block;
+    }
+}
