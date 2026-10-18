@@ -26,3 +26,24 @@ defined("MOODLE_INTERNAL") || die();
 
 $string["allowsearch"] = "Permitir pesquisa no texto do PDF";
 $string["allowsearch_desc"] = "Permite pesquisar palavras dentro dos PDFs protegidos e destacar os resultados. A ativação também cria uma camada textual no navegador, sem alterar as restrições de download e impressão. Deixe desativado para preservar o comportamento atual do visualizador.";
+
+$string["contentheader"] = "Conteúdo";
+$string["dnduploadpdfprotect"] = "Criar novo PDF Protect";
+$string["filenotfound"] = "Arquivo não encontrado!";
+$string["mobileopen"] = "Abrir PDF protegido";
+$string["mobileopeninfo"] = "Para visualizar este PDF protegido no aplicativo, abra-o no navegador integrado.";
+$string["modulename"] = "PDF Protect";
+$string["modulename_help"] = "O módulo PDF Protect oferece recursos para dificultar o download de arquivos PDF no Moodle.";
+$string["modulenameplural"] = "PDFs protegidos";
+$string["page-mod-pdfprotect-x"] = "Qualquer página do PDF Protect";
+$string["pdfprotect:addinstance"] = "Adicionar uma atividade PDF Protect";
+$string["pdfprotect:view"] = "Visualizar conteúdo do PDF Protect";
+$string["pdfprotectcontent"] = "Conteúdo PDF protegido";
+$string["pluginadministration"] = "Administração do PDF Protect";
+$string["pluginname"] = "PDF Protect";
+$string["privacy:metadata"] = "O plugin PDF Protect não armazena dados pessoais.";
+$string["resource:addinstance"] = "Adicionar novo recurso";
+$string["resource:exportresource"] = "Exportar PDF Protect";
+$string["resource:view"] = "Visualizar PDF Protect";
+$string["resourcedetails_sizetype"] = "{\$a->size} {\$a->type}";
+$string["selectmainfile"] = "Selecione o arquivo principal clicando no ícone ao lado do nome do arquivo.";
