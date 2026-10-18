@@ -37,6 +37,13 @@ require_once($CFG->dirroot . "/mod/pdfprotect/lib.php");
  */
 final class completion_calendar_test extends \advanced_testcase {
     /**
+     * Moodle discovers Timeline action callbacks by their full component name.
+     */
+    public function test_timeline_callback_uses_full_component_name(): void {
+        $this->assertTrue(function_exists("mod_pdfprotect_core_calendar_provide_event_action"));
+    }
+
+    /**
      * No expected date must not create a completion calendar event.
      */
     public function test_no_calendar_event_without_expected_date(): void {
