@@ -614,7 +614,7 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
  * @param int $userid User ID for completion checks; 0 means current user.
  * @return \core_calendar\local\event\entities\action_interface|null
  */
-function pdfprotect_core_calendar_provide_event_action(
+function mod_pdfprotect_core_calendar_provide_event_action(
     calendar_event $event,
     \core_calendar\action_factory $factory,
     $userid = 0
@@ -627,11 +627,11 @@ function pdfprotect_core_calendar_provide_event_action(
 
     $modinfo = get_fast_modinfo($event->courseid, $userid);
 
-    if (empty($modinfo->instances['pdfprotect'][$event->instance])) {
+    if (empty($modinfo->instances["pdfprotect"][$event->instance])) {
         return null;
     }
 
-    $cm = $modinfo->instances['pdfprotect'][$event->instance];
+    $cm = $modinfo->instances["pdfprotect"][$event->instance];
 
     if (!$cm->uservisible) {
         return null;
@@ -645,8 +645,8 @@ function pdfprotect_core_calendar_provide_event_action(
     }
 
     return $factory->create_instance(
-        get_string('view'),
-        new \moodle_url('/mod/pdfprotect/view.php', ['id' => $cm->id]),
+        get_string("view"),
+        new \moodle_url("/mod/pdfprotect/view.php", ["id" => $cm->id]),
         1,
         true
     );
