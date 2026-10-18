@@ -24,6 +24,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string["superflipbookbanner_badge"] = "INTERACTIVE PDF READING";
+$string["superflipbookbanner_benefit_gallery"] = "Gallery of up to 30 PDFs";
+$string["superflipbookbanner_benefit_reader"] = "Page-turning reader with zoom and fullscreen";
+$string["superflipbookbanner_benefit_tracking"] = "Reading progress and completion for the first PDF";
+$string["superflipbookbanner_cta"] = "Explore Super Flipbook";
+$string["superflipbookbanner_description"] = "Build an interactive PDF library with cover previews and a page-turning reader. Super Flipbook offers reading progress and completion tools for the first document in each activity.";
+$string["superflipbookbanner_dismiss"] = "Do not show this again";
+$string["superflipbookbanner_error"] = "Could not hide this notice. Please try again.";
+$string["superflipbookbanner_title"] = "Discover Super Flipbook for Moodle";
+
 $string["allowsearch"] = "Enable PDF text search";
 $string["allowsearch_desc"] = "Allow users to search inside protected PDFs and highlight matching text. Enabling this also creates a text layer in the browser; it does not change download or print restrictions. Leave disabled to preserve the existing viewer behaviour.";
 $string['contentheader'] = 'Content';
