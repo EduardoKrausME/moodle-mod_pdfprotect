@@ -1,0 +1,39 @@
+{{!
+    @template mod_pdfprotect/superflipbook_banner
+
+    A non-nested, permanently dismissible banner in the activity editing form.
+    The button has type="button" so it never submits the Moodle form.
+
+    Example context (json):
+    {
+        "dismiss_url": "https://moodle.example/mod/pdfprotect/dismiss_superflipbook_banner.php"
+    }
+}}
+<aside class="pdfprotect-superflipbook-banner"
+       data-pdfprotect-superflipbook-banner
+       data-dismiss-url="{{dismiss_url}}"
+       aria-labelledby="pdfprotect-superflipbook-banner-title">
+    <div class="pdfprotect-superflipbook-banner__icon" aria-hidden="true">PDF<span>+</span></div>
+    <div class="pdfprotect-superflipbook-banner__content">
+        <span class="pdfprotect-superflipbook-banner__badge">{{#str}}superflipbookbanner_badge,mod_pdfprotect{{/str}}</span>
+        <h3 id="pdfprotect-superflipbook-banner-title">{{#str}}superflipbookbanner_title,mod_pdfprotect{{/str}}</h3>
+        <p>{{#str}}superflipbookbanner_description,mod_pdfprotect{{/str}}</p>
+        <ul class="pdfprotect-superflipbook-banner__benefits">
+            <li>{{#str}}superflipbookbanner_benefit_gallery,mod_pdfprotect{{/str}}</li>
+            <li>{{#str}}superflipbookbanner_benefit_reader,mod_pdfprotect{{/str}}</li>
+            <li>{{#str}}superflipbookbanner_benefit_tracking,mod_pdfprotect{{/str}}</li>
+        </ul>
+        <a class="pdfprotect-superflipbook-banner__link"
+           href="https://github.com/EduardoKrausME/moodle-mod_superflipbook"
+           target="_blank" rel="noopener noreferrer">
+            {{#str}}superflipbookbanner_cta,mod_pdfprotect{{/str}} <span aria-hidden="true">&#8599;</span>
+        </a>
+    </div>
+    <button type="button"
+            class="pdfprotect-superflipbook-banner__dismiss"
+            data-pdfprotect-superflipbook-dismiss
+            aria-label="{{#str}}superflipbookbanner_dismiss,mod_pdfprotect{{/str}}"
+            title="{{#str}}superflipbookbanner_dismiss,mod_pdfprotect{{/str}}">&times;</button>
+    <span class="pdfprotect-superflipbook-banner__error" role="alert"
+          data-pdfprotect-superflipbook-error hidden>{{#str}}superflipbookbanner_error,mod_pdfprotect{{/str}}</span>
+</aside>
