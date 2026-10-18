@@ -38,8 +38,16 @@ class mod_pdfprotect_mod_form extends moodleform_mod {
      * @throws \coding_exception
      */
     public function definition() {
-        global $CFG;
+        global $CFG, $OUTPUT, $PAGE;
         $mform = &$this->_form;
+
+        // Show an optional recommendation before the activity settings.
+        if (\mod_pdfprotect\superflipbook_banner::should_show()) {
+            $mform->addElement("html", $OUTPUT->render_from_template("mod_pdfprotect/superflipbook_banner", [
+                "dismiss_url" => (new moodle_url("/mod/pdfprotect/dismiss_superflipbook_banner.php"))->out(false),
+            ]));
+            $PAGE->requires->js_call_amd("mod_pdfprotect/superflipbook_banner", "init");
+        }
 
         $mform->addElement("header", "general", get_string("general", "form"));
         $mform->addElement("text", "name", get_string("name"), ["size" => "48"]);
