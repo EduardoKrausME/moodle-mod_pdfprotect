@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string["allowsearch"] = "Enable PDF text search";
+$string["allowsearch_desc"] = "Allow users to search inside protected PDFs and highlight matching text. Enabling this also creates a text layer in the browser; it does not change download or print restrictions. Leave disabled to preserve the existing viewer behaviour.";
 $string['contentheader'] = 'Content';
 $string['dnduploadpdfprotect'] = 'Create new PDF Protect';
 $string['filenotfound'] = 'File not found!';
