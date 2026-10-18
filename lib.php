@@ -137,6 +137,10 @@ function pdfprotect_add_instance($pdfprotect, $mform = null) {
     $DB->set_field("course_modules", "instance", $pdfprotect->id, ["id" => $cmid]);
     pdfprotect_set_mainfile($pdfprotect);
 
+    // Create the expected-completion calendar event when a date is configured.
+    $completionexpected = !empty($pdfprotect->completionexpected) ? (int) $pdfprotect->completionexpected : null;
+    \core_completion\api::update_completion_date_event($cmid, "pdfprotect", $pdfprotect->id, $completionexpected);
+
     return $pdfprotect->id;
 }
 
@@ -161,22 +165,13 @@ function pdfprotect_update_instance($pdfprotect, $mform) {
 
     pdfprotect_set_mainfile($pdfprotect);
 
-    // Synchronise the expected-completion calendar event.
-    $cm = get_coursemodule_from_instance(
-        'pdfprotect',
-        $pdfprotect->id,
-        $pdfprotect->course,
-        false,
-        MUST_EXIST
-    );
-
+    // Update the calendar event or remove it when the expected date is cleared.
+    $completionexpected = !empty($pdfprotect->completionexpected) ? (int) $pdfprotect->completionexpected : null;
     \core_completion\api::update_completion_date_event(
-        $cm->id,
-        'pdfprotect',
+        $pdfprotect->coursemodule,
+        "pdfprotect",
         $pdfprotect,
-        empty($cm->completionexpected)
-            ? null
-            : (int) $cm->completionexpected
+        $completionexpected
     );
 
     return true;
@@ -202,6 +197,9 @@ function pdfprotect_delete_instance($id) {
     if (!$cm = get_coursemodule_from_instance('pdfprotect', $id)) {
         return false;
     }
+
+    // Delete the expected-completion event before removing the module instance.
+    \core_completion\api::update_completion_date_event($cm->id, "pdfprotect", $pdfprotect->id, null);
 
     // Delete any files associated with the pdfprotect.
     $context = context_module::instance($cm->id);
