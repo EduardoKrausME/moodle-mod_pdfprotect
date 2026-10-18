@@ -77,6 +77,9 @@ require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/pdfprotect:view', $context);
 
+// The server-side setting controls the PDF.js search interface and text layer.
+$allowsearch = (bool) get_config("mod_pdfprotect", "allowsearch");
+
 $params = [
     'context' => $context,
     'objectid' => $pdfprotect->id,
@@ -169,6 +172,12 @@ PDF Protect by DRM
           href="../external/webL10n/locales/<?php
           echo $uselang ?>/viewer.properties">
     <style>
+        /* Keep PDF.js find controls hidden when search is disabled by the administrator. */
+        body[data-allow-search="false"] #viewFind,
+        body[data-allow-search="false"] #findbar {
+            display: none !important;
+        }
+
         .toolbarButton.fullscreen {
             display: flex;
             align-items: center;
@@ -209,7 +218,7 @@ PDF Protect by DRM
     </style>
 </head>
 
-<body tabindex="1" class="loadingInProgress<?php echo $mobile ? ' pdfprotect-mobile-app' : ''; ?>" oncontextmenu="return false">
+<body tabindex="1" class="loadingInProgress<?php echo $mobile ? ' pdfprotect-mobile-app' : ''; ?>" data-allow-search="<?php echo $allowsearch ? "true" : "false"; ?>" oncontextmenu="return false">
     <script>
         // Dynamically load language.
         document.webL10n.setLanguage('<?php echo $uselang ?>');
