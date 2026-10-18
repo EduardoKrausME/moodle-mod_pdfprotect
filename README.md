@@ -22,6 +22,18 @@ This is a Moodle module developed to provide an extra layer of security for PDF 
 
 Now, users will have access to the PDF directly in the browser, with no option to download, print, or copy the content.
 
+## Administrator setting: PDF text search
+
+Site administrators can control search and highlighting in **Site administration → Plugins → Activity modules → PDF Protect**.
+
+- **Enable PDF text search** (`mod_pdfprotect/allowsearch`) is disabled by default.
+- When enabled, the protected PDF viewer exposes search and highlighting, including the text layer needed to display search results.
+- When disabled, search controls, internal search shortcuts, and the text layer remain disabled.
+
+The server renders `data-allow-search="true"` or `data-allow-search="false"` on the viewer's `<body>` tag. The PDF.js application reads this attribute when it starts; stored viewer preferences cannot override the administrator setting.
+
+This setting controls the reader experience, not a cryptographic security boundary: browser-side search functionality and CSS restrictions alone cannot guarantee that PDF text is impossible to extract.
+
 ## Contributions
 
 If you have suggestions or improvements for the plugin, feel free to create a *pull request* or open an *issue*.
