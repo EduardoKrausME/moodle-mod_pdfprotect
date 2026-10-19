@@ -27,8 +27,6 @@ namespace mod_pdfprotect;
 // phpcs:ignore moodle.Files.MoodleInternal.MoodleInternalGlobalState -- Moodle checks this guarded entry point.
 defined("MOODLE_INTERNAL") || die();
 
-require_once(__DIR__ . "/../lib.php");
-
 /**
  * Verifies calendar events throughout the PDF Protect activity lifecycle.
  *
@@ -42,6 +40,18 @@ require_once(__DIR__ . "/../lib.php");
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class completion_calendar_test extends \advanced_testcase {
+    /**
+     * Loads activity callbacks after Moodle initialises its global configuration.
+     *
+     * @return void
+     */
+    protected function setUp(): void {
+        global $CFG;
+
+        parent::setUp();
+        require_once($CFG->dirroot . "/mod/pdfprotect/lib.php");
+    }
+
     /**
      * Moodle discovers Timeline action callbacks by their full component name.
      */
