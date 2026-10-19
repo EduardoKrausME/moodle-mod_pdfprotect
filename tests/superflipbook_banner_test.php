@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Tests for the optional Super Flipbook promotion in the activity form.
@@ -24,10 +24,13 @@
 
 namespace mod_pdfprotect;
 
+// phpcs:ignore moodle.Files.MoodleInternal.MoodleInternalGlobalState -- Moodle checks this guarded entry point.
 defined("MOODLE_INTERNAL") || die();
 
 /**
  * Super Flipbook promotion visibility and permanent dismissal.
+ *
+ * @covers \mod_pdfprotect\superflipbook_banner
  */
 final class superflipbook_banner_test extends \advanced_testcase {
     /**

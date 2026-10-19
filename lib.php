@@ -602,7 +602,6 @@ function pdfprotect_view($pdfprotect, $course, $cm, $context) {
     // Completion.
     $completion = new completion_info($course);
     $completion->set_module_viewed($cm);
-
 }
 
 /**

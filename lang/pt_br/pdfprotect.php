@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Brazilian Portuguese language strings for PDF Protect.
@@ -24,19 +24,8 @@
 
 defined("MOODLE_INTERNAL") || die();
 
-$string["superflipbookbanner_badge"] = "LEITURA INTERATIVA DE PDF";
-$string["superflipbookbanner_benefit_gallery"] = "Galeria com até 30 PDFs";
-$string["superflipbookbanner_benefit_reader"] = "Leitor com efeito de páginas, zoom e tela cheia";
-$string["superflipbookbanner_benefit_tracking"] = "Progresso e conclusão da leitura do primeiro PDF";
-$string["superflipbookbanner_cta"] = "Conhecer o Super Flipbook";
-$string["superflipbookbanner_description"] = "Crie uma biblioteca de PDFs com capas e leitura no estilo folhear páginas. O Super Flipbook oferece recursos de acompanhamento da leitura e conclusão para o primeiro documento de cada atividade.";
-$string["superflipbookbanner_dismiss"] = "Não mostrar novamente";
-$string["superflipbookbanner_error"] = "Não foi possível ocultar o aviso. Tente novamente.";
-$string["superflipbookbanner_title"] = "Conheça o Super Flipbook para Moodle";
-
 $string["allowsearch"] = "Permitir pesquisa no texto do PDF";
 $string["allowsearch_desc"] = "Permite pesquisar palavras dentro dos PDFs protegidos e destacar os resultados. A ativação também cria uma camada textual no navegador, sem alterar as restrições de download e impressão. Deixe desativado para preservar o comportamento atual do visualizador.";
-
 $string["contentheader"] = "Conteúdo";
 $string["dnduploadpdfprotect"] = "Criar novo PDF Protect";
 $string["filenotfound"] = "Arquivo não encontrado!";
@@ -57,3 +46,12 @@ $string["resource:exportresource"] = "Exportar PDF Protect";
 $string["resource:view"] = "Visualizar PDF Protect";
 $string["resourcedetails_sizetype"] = "{\$a->size} {\$a->type}";
 $string["selectmainfile"] = "Selecione o arquivo principal clicando no ícone ao lado do nome do arquivo.";
+$string["superflipbookbanner_badge"] = "LEITURA INTERATIVA DE PDF";
+$string["superflipbookbanner_benefit_gallery"] = "Galeria com até 30 PDFs";
+$string["superflipbookbanner_benefit_reader"] = "Leitor com efeito de páginas, zoom e tela cheia";
+$string["superflipbookbanner_benefit_tracking"] = "Progresso e conclusão da leitura do primeiro PDF";
+$string["superflipbookbanner_cta"] = "Conhecer o Super Flipbook";
+$string["superflipbookbanner_description"] = "Crie uma biblioteca de PDFs com capas e leitura no estilo folhear páginas. O Super Flipbook oferece recursos de acompanhamento da leitura e conclusão para o primeiro documento de cada atividade.";
+$string["superflipbookbanner_dismiss"] = "Não mostrar novamente";
+$string["superflipbookbanner_error"] = "Não foi possível ocultar o aviso. Tente novamente.";
+$string["superflipbookbanner_title"] = "Conheça o Super Flipbook para Moodle";
