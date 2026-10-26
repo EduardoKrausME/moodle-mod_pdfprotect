@@ -11,7 +11,6 @@ This is a Moodle module developed to provide an extra layer of security for PDF 
 ## Requirements
 
 - Moodle 2.7 or higher.
-- Proper permissions to install and manage plugins on your Moodle site.
 
 ## How to Use
 
