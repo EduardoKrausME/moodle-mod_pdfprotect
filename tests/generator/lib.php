@@ -22,8 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// phpcs:ignore moodle.Files.MoodleInternal.MoodleInternalGlobalState -- Guard this Moodle test generator.
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Creates PDF Protect modules using the standard Moodle module generator.
