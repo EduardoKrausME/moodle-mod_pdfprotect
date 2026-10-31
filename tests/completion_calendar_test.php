@@ -24,8 +24,6 @@
 
 namespace mod_pdfprotect;
 
-// phpcs:ignore moodle.Files.MoodleInternal.MoodleInternalGlobalState -- Moodle checks this guarded entry point.
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Verifies calendar events throughout the PDF Protect activity lifecycle.
