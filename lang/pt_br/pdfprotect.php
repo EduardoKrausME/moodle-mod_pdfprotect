@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined("MOODLE_INTERNAL") || die();
+defined('MOODLE_INTERNAL') || die();
 
 $string['allowsearch'] = 'Permitir pesquisa no texto do PDF';
 $string['allowsearch_desc'] = 'Permite pesquisar palavras dentro dos PDFs protegidos e destacar os resultados. A ativação também cria uma camada textual no navegador, sem alterar as restrições de download e impressão. Deixe desativado para preservar o comportamento atual do visualizador.';

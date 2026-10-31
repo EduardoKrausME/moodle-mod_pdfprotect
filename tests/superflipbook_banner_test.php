@@ -25,7 +25,7 @@
 namespace mod_pdfprotect;
 
 // phpcs:ignore moodle.Files.MoodleInternal.MoodleInternalGlobalState -- Moodle checks this guarded entry point.
-defined("MOODLE_INTERNAL") || die();
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Super Flipbook promotion visibility and permanent dismissal.
