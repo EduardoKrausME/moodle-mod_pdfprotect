@@ -2,6 +2,14 @@
 
 This file documents only the two latest published GitHub releases. Changes are attributed to the release tag that contains them, using the immediately preceding published release as the comparison baseline. Later changes on `master` are not included.
 
+## 3.3.5 - 2026-11-01
+
+- Normalized English and Brazilian Portuguese language-string ordering and expanded the Super Flipbook banner Mustache header.
+- Removed unnecessary `MOODLE_INTERNAL` coding-standard suppressions and adjusted PHP and JavaScript license headers.
+- Removed obsolete installation directions and an empty Mustache example context.
+
+**Full comparison:** [3.3.4...3.3.5](https://github.com/EduardoKrausME/moodle-mod_pdfprotect/compare/3.3.4...3.3.5)
+
 ## 3.3.4 - 2026-10-19
 
 ### Added
