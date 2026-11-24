@@ -24,7 +24,6 @@
 
 namespace mod_pdfprotect;
 
-
 /**
  * Determine whether the optional Super Flipbook promotion is relevant to the current user.
  */

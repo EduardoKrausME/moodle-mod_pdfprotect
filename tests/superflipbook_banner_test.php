@@ -24,7 +24,6 @@
 
 namespace mod_pdfprotect;
 
-
 /**
  * Super Flipbook promotion visibility and permanent dismissal.
  *

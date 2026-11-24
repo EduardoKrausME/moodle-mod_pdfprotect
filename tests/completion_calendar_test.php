@@ -24,7 +24,6 @@
 
 namespace mod_pdfprotect;
 
-
 /**
  * Verifies calendar events throughout the PDF Protect activity lifecycle.
  *
