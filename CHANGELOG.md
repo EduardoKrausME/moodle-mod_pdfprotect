@@ -1,6 +1,14 @@
 # Changelog
 
-This file documents only the two latest published GitHub releases. Changes are attributed to the release tag that contains them, using the immediately preceding published release as the comparison baseline. Later changes on `master` are not included.
+This file documents recent published GitHub releases. Changes are attributed to the release tag that contains them, using the immediately preceding published release as the comparison baseline. Later changes on `master` are not included.
+
+## 3.3.6 - 2026-11-24
+
+- Removed an unnecessary Moodle internal-state coding-standard suppression in settings.php, retaining the access guard.
+- Refreshed the compiled Super Flipbook banner AMD module.
+- Added a security reporting policy and updated release metadata.
+
+**Comparison:** [3.3.5...3.3.6](https://github.com/EduardoKrausME/moodle-mod_pdfprotect/compare/3.3.5...3.3.6)
 
 ## 3.3.5 - 2026-11-01
 
